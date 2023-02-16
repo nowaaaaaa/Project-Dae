@@ -1,3 +1,4 @@
+#python -m pip install pysimplegui
 import PySimpleGUI as sg
 
 layout = [[sg.Text("We gaan SBOMbarderen.")], [sg.Button("OK DOE DAN")]]
