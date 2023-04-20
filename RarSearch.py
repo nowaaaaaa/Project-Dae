@@ -8,12 +8,12 @@ def print_all_files_in_docker_container(image_name):
     try:
         container = client.containers.run(image_name, detach=True, tty=True)
         print(f"Container ID: {container.id}")
-        exec_instance = container.exec_run(cmd="find / -name '*.rar' -o -name '*.zip' -o -name '*.tar' -o -name '*.tar.gz' -o -name '*.jar' -o -name '*.war' -o -name '*.ear'")
+        exec_instance = container.exec_run(cmd="find / -name '*.rar' -o -name '*.zip' -o -name '*.tar' -o -name '*.tar.gz' -o -name '*.jar' -o -name '*.war' -o -name '*.ear' -o -name '*.class'")
         for file_path in exec_instance.output.decode().splitlines():
             print(file_path)
             #fileName = os.path.split(file_path)[1]
             #os.system(f"syft {file_path} -o syft-json --file C:/Users/nootj/Desktop/{fileName}.json")
-            # if file_path.endswith(('.rar', '.zip', '.tar', '.tar.gz', '.jar', '.war', '.ear', '.rar')):
+            # if file_path.endswith(('.rar', '.zip', '.tar', '.tar.gz', '.jar', '.war', '.ear', '.rar', class)):
             #     try:
             #         with container.get_archive(file_path) as stream:
             #             tar = tarfile.open(fileobj=stream)
