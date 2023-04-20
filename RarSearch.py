@@ -8,11 +8,11 @@ def print_all_files_in_docker_container(image_name):
     try:
         container = client.containers.run(image_name, detach=True, tty=True)
         print(f"Container ID: {container.id}")
-        exec_instance = container.exec_run(cmd="find / -name '*.rar' -o -name '*.zip'")
+        exec_instance = container.exec_run(cmd="find / -name '*.rar' -o -name '*.zip' -o -name '*.tar' -o -name '*.tar.gz' -o -name '*.jar' -o -name '*.war' -o -name '*.ear'")
         for file_path in exec_instance.output.decode().splitlines():
             print(file_path)
             #os.system(f"syft {file_path} -o json > {file_path}.json")
-            if file_path.endswith(('.rar', '.zip')):
+            if file_path.endswith(('.rar', '.zip', '.tar', '.tar.gz', '.jar', '.war', '.ear', '.rar')):
                 try:
                     with container.get_archive(file_path) as stream:
                         tar = tarfile.open(fileobj=stream)
