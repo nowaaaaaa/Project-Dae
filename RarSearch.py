@@ -12,7 +12,7 @@ def print_all_files_in_docker_container(image_name):
         for file_path in exec_instance.output.decode().splitlines():
             print(file_path)
             #os.system(f"syft {file_path} -o json > {file_path}.json")
-            if file_path.endswith(('.rar', '.zip', '.tar', '.tar.gz', '.jar', '.war', '.ear', '.rar')):
+            if file_path.endswith(('.rar', '.zip', '.tar', '.tar.gz', '.jar', '.war', '.ear', '.rar', 'class')):
                 try:
                     with container.get_archive(file_path) as stream:
                         tar = tarfile.open(fileobj=stream)
