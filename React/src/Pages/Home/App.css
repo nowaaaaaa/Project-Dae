@@ -1,0 +1,159 @@
+.screen {
+  background-color: #fff;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  flex-direction: row;
+}
+
+.sidebar {
+  background-color: #948e8e;
+  color: black;
+  height: 100vh;
+  width: 13%;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: start;
+}
+
+.main {
+  background-color: #fff;
+  color: black;
+  height: 100vh;
+  width: 87%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: left;
+}
+
+.head {
+  color: black;
+  font-size: large;
+  margin-left: 20px;
+
+}
+
+.side-item {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  justify-content: start;
+  transition: 100ms;
+  cursor: pointer;
+}
+
+.side-item:hover {
+  background-color: #d3d3d3;
+  transition: 100ms;
+}
+
+.images {
+  display: flex;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+
+.image {
+  background-color: #948e8e;
+  border-radius: 5px;
+  margin-left: 10px;
+  height: 30px;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-width: 90px;
+}
+
+.imtxt {
+  font-size: large;
+}
+
+.dep {
+  background-color: #d3d3d3;
+  border-radius: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 80px;
+  margin-bottom: 5px;
+  width: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: auto;
+}
+
+.info {
+  padding: 0px;
+  margin: 0px;
+}
+
+.foundDeps {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.depHolder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  outline: black solid 1px;
+  background-color: #d3d3d3;
+  border-radius: 10px;
+  margin: 3px;
+}
+
+.depForm {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+
+}
+
+.editHolder {
+  background-color: #4fac01;
+  height: 100%;
+  border-radius: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-right: 5px;
+  display: flex;
+  cursor: pointer;
+}
+
+.edit {
+  margin: auto;
+}
+
+.deleteHolder {
+  background-color: #db0b0b;
+  height: 100%;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  display: flex;
+  cursor: pointer;
+}
+
+.delete {
+  margin: auto;
+}

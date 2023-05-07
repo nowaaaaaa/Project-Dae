@@ -1,0 +1,94 @@
+[
+  {
+    "name": "adduser",
+    "version": "3.118ubuntu5"
+  },
+  {
+    "name": "annotations-api",
+    "version": "2.1.1"
+  },
+  {
+    "name": "apt",
+    "version": "2.4.8"
+  },
+  {
+    "name": "base-files",
+    "version": "12ubuntu4.3"
+  },
+  {
+    "name": "base-passwd",
+    "version": "3.5.52build1"
+  },
+  {
+    "name": "bash",
+    "version": "5.1-6ubuntu1"
+  },
+  {
+    "name": "binutils",
+    "version": "2.38-4ubuntu2.1"
+  },
+  {
+    "name": "binutils-common",
+    "version": "2.38-4ubuntu2.1"
+  },
+  {
+    "name": "binutils-x86-64-linux-gnu",
+    "version": "2.38-4ubuntu2.1"
+  },
+  {
+    "name": "bootstrap",
+    "version": "10.1.8"
+  },
+  {
+    "name": "bsdutils",
+    "version": "1:2.37.2-4ubuntu3"
+  },
+  {
+    "name": "ca-certificates",
+    "version": "20211016ubuntu0.22.04.1"
+  },
+  {
+    "name": "catalina",
+    "version": "10.1.8"
+  },
+  {
+    "name": "catalina-ant",
+    "version": "10.1.8"
+  },
+  {
+    "name": "catalina-ha",
+    "version": "10.1.8"
+  },
+  {
+    "name": "catalina-ssi",
+    "version": "10.1.8"
+  },
+  {
+    "name": "catalina-storeconfig",
+    "version": "10.1.8"
+  },
+  {
+    "name": "catalina-tribes",
+    "version": "10.1.8"
+  },
+  {
+    "name": "commons-daemon",
+    "version": "1.3.3"
+  },
+  {
+    "name": "coreutils",
+    "version": "8.32-4.1ubuntu1"
+  },
+  {
+    "name": "curl",
+    "version": "7.81.0-1ubuntu1.10"
+  },
+  {
+    "name": "dash",
+    "version": "0.5.11+git20210903+057cd650a4ed-3build1"
+  },
+  {
+    "name": "debconf",
+    "version": "1.5.79ubuntu1"
+  }
+]
