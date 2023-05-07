@@ -1,0 +1,22 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:ee8aa0c2-e94f-4f4a-bde5-9b2ec9d890ea",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2023-04-20T15:01:08+02:00",
+    "tools": [
+      {
+        "vendor": "anchore",
+        "name": "syft",
+        "version": "0.74.0"
+      }
+    ],
+    "component": {
+      "bom-ref": "8a61f8192bda1a41",
+      "type": "file",
+      "name": "C:\\Users\\Crazy\\Desktop\\testttt\\assignment22_23_student_template_v2.zip"
+    }
+  },
+  "components": []
+}
