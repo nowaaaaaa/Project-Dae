@@ -3,7 +3,7 @@ import "./App.css";
 import tomcat from "../../assets/tomcatDeps.json";
 import baseline from "../../assets/baseline.json";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { Buffer } from "buffer";
 
 interface Dependency {
   name: string;
@@ -42,26 +42,48 @@ const DisplayFile: React.FC<{ file: Dependency[] }> = ({ file }) => {
   );
 };
 
-const Images: React.FC<{ deps: string[] }> = ({ deps }) => {
-  return (
-    <div className="images">
-      {deps.map((dep) => {
-        return (
-          <div className="image">
-            <h1 className="imtxt">{dep}</h1>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
 export function Home() {
+  const [file, setFile] = useState<Dependency[]>([]);
+  const Images: React.FC<{ deps: string[] }> = ({ deps }) => {
+    const changeDep = (dep: string) => {
+      fetch(
+        `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/FetchDeps`,
+        {
+          method: "GET",
+          headers: {
+            dep: dep,
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setFile(data);
+        });
+    };
+    return (
+      <div className="images">
+        {deps.map((dep) => {
+          return (
+            <div className="image">
+              <h1 className="imtxt" onClick={() => changeDep(dep)}>
+                {dep}
+              </h1>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   const [Img, setImg] = useState<string[]>([]);
 
   useEffect(() => {
     fetch(
-      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/get"
+      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/get",
+      {
+        method: "GET",
+        headers: {},
+      }
     )
       .then((res) => res.json())
       .then((data) => {
@@ -75,7 +97,7 @@ export function Home() {
         <Sidebar />
         <div className="main">
           <Images deps={Img} />
-          <DisplayFile file={tomcatDeps} />
+          <DisplayFile file={file} />
         </div>
       </div>
     </>
