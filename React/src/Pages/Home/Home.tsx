@@ -3,6 +3,7 @@ import "./App.css";
 import tomcat from "../../assets/tomcatDeps.json";
 import baseline from "../../assets/baseline.json";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
+import { MongoClient, ServerApiVersion } from "mongodb";
 
 interface Dependency {
   name: string;
@@ -56,59 +57,24 @@ const Images: React.FC<{ deps: string[] }> = ({ deps }) => {
 };
 
 export function Home() {
+  const [Img, setImg] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch(
+      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/get"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setImg(data);
+      });
+  }, []);
+
   return (
     <>
       <div className="screen">
         <Sidebar />
         <div className="main">
-          <Images
-            deps={[
-              "tomcat",
-              "java",
-              "python",
-              "nodejs",
-              "ruby",
-              "php",
-              "nginx",
-              "apache",
-              "mysql",
-              "postgres",
-              "mariadb",
-              "mongo",
-              "redis",
-              "memcached",
-              "rabbitmq",
-              "cassandra",
-              "couchdb",
-              "elas",
-              "kafka",
-              "zookeeper",
-              "hadoop",
-              "spark",
-              "tomcat",
-              "java",
-              "python",
-              "nodejs",
-              "ruby",
-              "php",
-              "nginx",
-              "apache",
-              "mysql",
-              "postgres",
-              "mariadb",
-              "mongo",
-              "redis",
-              "memcached",
-              "rabbitmq",
-              "cassandra",
-              "couchdb",
-              "elas",
-              "kafka",
-              "zookeeper",
-              "hadoop",
-              "spark",
-            ]}
-          />
+          <Images deps={Img} />
           <DisplayFile file={tomcatDeps} />
         </div>
       </div>
