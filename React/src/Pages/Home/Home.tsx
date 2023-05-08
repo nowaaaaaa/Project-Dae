@@ -46,19 +46,23 @@ export function Home() {
   const [file, setFile] = useState<Dependency[]>([]);
   const Images: React.FC<{ deps: string[] }> = ({ deps }) => {
     const changeDep = (dep: string) => {
-      fetch(
-        `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/FetchDeps`,
-        {
-          method: "GET",
-          headers: {
-            dep: dep,
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setFile(data);
-        });
+      // fetch(
+      //   `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/FetchDeps`,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       dep: dep,
+      //     },
+      //   }
+      // )
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     setFile(data);
+      //   });
+      fetch(`http://localhost:5000/api/SBOMs/${dep}/dependencies`)
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
     };
     return (
       <div className="images">
