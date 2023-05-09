@@ -10,6 +10,13 @@ interface SideItem {
 }
 
 const Side: React.FC<{ item: SideItem[] }> = ({ item }) => {
+  var cl = "";
+  if (window.location.pathname === "/edit") {
+    cl = "side-item-selected";
+  } else {
+    cl = "side-item";
+  }
+
   return (
     <div className="sidebar">
       {item.map((sideItem) => {

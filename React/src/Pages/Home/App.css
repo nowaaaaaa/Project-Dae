@@ -49,6 +49,18 @@
   cursor: pointer;
 }
 
+.side-item-active {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  justify-content: start;
+  transition: 100ms;
+  cursor: pointer;
+  background-color: #d3d3d3;
+}
+
 .side-item:hover {
   background-color: #d3d3d3;
   transition: 100ms;
@@ -123,10 +135,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.input {
-
 }
 
 .editHolder {
