@@ -41,11 +41,6 @@ export function Sidebar() {
           icon: <HomeOutlinedIcon fontSize="large" />,
           Link: "/",
         },
-        {
-          name: "Test",
-          icon: <HomeOutlinedIcon fontSize="large" />,
-          Link: "/test",
-        }
       ]}
     />
   );

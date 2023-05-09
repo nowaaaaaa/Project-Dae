@@ -42,10 +42,14 @@ def get_dependencies(database, collection):
 
     collection = db[collection]
 
-    dependencies = {}
+    dependencies = []
 
     for dependency in collection.find():
-        dependencies[dependency.get('name')] = dependency.get('version')
+        output = {
+            "name": dependency.get('name'),
+            "version": dependency.get('version')
+        }
+        dependencies.append(output)
 
     return dependencies
 
