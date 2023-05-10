@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import tomcat from "../../assets/tomcatDeps.json";
 import baseline from "../../assets/baseline.json";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
-import { Buffer } from "buffer";
 
 interface Dependency {
   name: string;
   version: string;
 }
 
-const baseLine = baseline as Dependency[];
+interface Image {
+  name: string;
+  dependencies: Dependency[];
+}
 
-const tomcatDeps = tomcat as Dependency[];
+const baseLine = baseline as Dependency[];
 
 const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
   return (
