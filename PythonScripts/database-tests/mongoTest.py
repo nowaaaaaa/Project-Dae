@@ -2,6 +2,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import json
 import os
+import sys
 uri = "mongodb+srv://kieranvdheijden:Pass@mongo1.wlbtqtb.mongodb.net/?retryWrites=true&w=majority"
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
@@ -45,4 +46,7 @@ def syft(Image):
     os.remove(f"{Image}Deps.json")
     print("Successfully removed file")
 
-syft(input("Enter the name of the file: "))
+#syft(input("Enter the name of the file: "))
+if len(sys.argv) != 2:
+    raise Exception("Error: give one argument (image name)")
+syft(sys.argv[1])
