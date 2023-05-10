@@ -5,8 +5,12 @@ import { Sidebar } from "../../Components/Sidebar/Sidebar";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import SearchIcon from "@mui/icons-material/Search";
+import ImageSearchIcon from "@mui/icons-material/ImageSearch";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
+import Tooltip from "@mui/material/Tooltip";
 
 interface Dependency {
   name: string;
@@ -83,6 +87,7 @@ const DisplayAll: React.FC<{ files: String[] }> = ({ files }) => {
 
 export function Home() {
   const [file, setFile] = useState<Image[]>([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetch(
@@ -101,6 +106,44 @@ export function Home() {
         <Sidebar />
         <div className="main">
           <h1 className="image-name">Your Images:</h1>
+          <div className="textFields">
+            <Tooltip title="Search Dependencies">
+              <span
+                onClick={() => {
+                  fetch(
+                    `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps?dep=${search}`
+                  )
+                    .then((response) => response.json())
+                    .then((data) => {
+                      console.log(data);
+                      setFile(data);
+                    });
+                }}
+              >
+                <FindInPageIcon fontSize="large" className="icon" />
+              </span>
+            </Tooltip>
+            <TextField
+              label="Search Images"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Tooltip title="Search Images">
+              <span
+                onClick={() => {
+                  fetch(
+                    `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps?name=${search}`
+                  )
+                    .then((response) => response.json())
+                    .then((data) => {
+                      console.log(data);
+                      setFile(data);
+                    });
+                }}
+              >
+                <ImageSearchIcon fontSize="large" className="icon" />
+              </span>
+            </Tooltip>
+          </div>
           {file.map((image) => {
             return (
               <>

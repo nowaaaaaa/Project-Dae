@@ -181,3 +181,26 @@
   margin-bottom: 1rem;
   outline: none;
 }
+
+.divider {
+  transform: translateY(-300%);
+}
+
+.textFields {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.icon:hover {
+  background-color: #00000042;
+  border-radius: 50px;
+  padding: 5px;
+}
+
+.icon {
+  padding: 5px;
+}
