@@ -2,11 +2,6 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import baseline from "../../assets/baseline.json";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 interface Dependency {
   name: string;
@@ -82,16 +77,41 @@ const DisplayAll: React.FC<{ files: String[] }> = ({ files }) => {
 };
 
 export function Home() {
-  const [file, setFile] = useState<Image[]>([]);
+  const [file, setFile] = useState<Dependency[]>([]);
+  const Images: React.FC<{ deps: string[] }> = ({ deps }) => {
+    const changeDep = (dep: string) => {
+      fetch(`http://localhost:5000/api/SBOMs/${dep}/dependencies`)
+        .then((response) => response.json())
+        .then((data) => setFile(data));
+    };
+    return (
+      <div className="images">
+        {deps.map((dep) => {
+          return (
+            <div className="image">
+              <h1 className="imtxt" onClick={() => changeDep(dep)}>
+                {dep}
+              </h1>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const [Img, setImg] = useState<string[]>([]);
 
   useEffect(() => {
     fetch(
-      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps"
+      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/get",
+      {
+        method: "GET",
+        headers: {},
+      }
     )
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setFile(data);
+        setImg(data);
       });
   }, []);
 
@@ -100,23 +120,9 @@ export function Home() {
       <div className="screen">
         <Sidebar />
         <div className="main">
-          <h1 className="image-name">Your Images:</h1>
-          {file.map((image) => {
-            return (
-              <>
-                <Accordion className="acc" sx={{ bgcolor: "#d3d3d3" }}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <div>
-                      <h1 className="image-name">{image.name}</h1>
-                    </div>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <DisplayFile file={image.dependencies} />
-                  </AccordionDetails>
-                </Accordion>
-              </>
-            );
-          })}
+          <Images deps={Img} />
+          <DisplayFile file={file} />
+          {/* <DisplayAll files={Img} /> */}
         </div>
       </div>
     </>
