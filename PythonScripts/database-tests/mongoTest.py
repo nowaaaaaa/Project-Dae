@@ -14,14 +14,13 @@ def syft(Image):
     if (client.get_database('sbomTest').get_collection(f"deps").find_one({"name": realImg})) != None:
         print("SBOM already exists in database")
         exit(1)
+        
     fileName = f"{Image}Deps.json"
     error = os.system(f"syft {realImg} -o cyclonedx-json --file {fileName}")
     if (error == 1):
         print("Syft command not ran correctly.")
         os.remove(fileName)
         exit(1)
-
-    fileName = f"{Image}Deps.json"
 
     try:
         with open(fileName) as f:
@@ -48,7 +47,7 @@ def syft(Image):
         print("Successfully added to MongoDB")
     except Exception as e:
         print(e)
-    os.remove(f"{Image}Deps.json")
+    os.remove(fileName)
     print("Successfully removed file")
 
 # syft(input("Enter the name of the file: "))

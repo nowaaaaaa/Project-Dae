@@ -149,8 +149,11 @@ export function Home() {
               </span>
             </Tooltip>
             {/* {<input type="checkbox" name="checkiewhackie" id="useBase" onClick={() => setUseBase(!useBase)} />} */}
-            <Switch defaultChecked={useBase} color="secondary" onChange={() => setUseBase(!useBase)}/>
 
+          </div>
+          <div className="check">
+              Filter baseline
+              <Switch defaultChecked={useBase} color="secondary" onChange={() => setUseBase(!useBase)}/>
           </div>
           <div className="accHolder">
           {file.map((image) => {

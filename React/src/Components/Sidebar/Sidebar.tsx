@@ -39,15 +39,15 @@ export function Sidebar() {
     <Side
       item={[
         {
-          name: "Edit Baseline",
-          icon: <ImageSearchIcon fontSize="large" />,
-          Link: "/edit",
-        },
-        {
           name: "Home",
           icon: <HomeOutlinedIcon fontSize="large" />,
           Link: "/",
         },
+        {
+          name: "Edit Baseline",
+          icon: <ImageSearchIcon fontSize="large" />,
+          Link: "/edit",
+        }
       ]}
     />
   );
