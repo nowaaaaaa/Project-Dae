@@ -9,12 +9,17 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 # Send a ping to confirm a successful connection
 def syft(Image):
     Image = Image.lower()
-
-    if (client.get_database('sbomTest').get_collection(f"deps").find_one({"name": Image})) != None:
+    realImg = Image
+    Image = Image.replace(":", "_")    
+    if (client.get_database('sbomTest').get_collection(f"deps").find_one({"name": realImg})) != None:
         print("SBOM already exists in database")
         exit(1)
-
-    os.system(f"syft {Image} -o cyclonedx-json > {Image}Deps.json")
+    fileName = f"{Image}Deps.json"
+    error = os.system(f"syft {realImg} -o cyclonedx-json --file {fileName}")
+    if (error == 1):
+        print("Syft command not ran correctly.")
+        os.remove(fileName)
+        exit(1)
 
     fileName = f"{Image}Deps.json"
 
@@ -34,7 +39,7 @@ def syft(Image):
         foundComponents.append({"name": c['name'], "version": c.get('version', '')})
 
     upload = {
-        "name": Image,
+        "name": realImg,
         "dependencies": foundComponents
     }
 
@@ -46,7 +51,7 @@ def syft(Image):
     os.remove(f"{Image}Deps.json")
     print("Successfully removed file")
 
-#syft(input("Enter the name of the file: "))
+# syft(input("Enter the name of the file: "))
 if len(sys.argv) != 2:
     raise Exception("Error: give one argument (image name)")
 syft(sys.argv[1])

@@ -11,6 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import Tooltip from "@mui/material/Tooltip";
+import Switch from '@mui/material/Switch';
 
 interface Dependency {
   name: string;
@@ -33,10 +34,13 @@ const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
   );
 };
 
-const DisplayFile: React.FC<{ file: Dependency[] }> = ({ file }) => {
+const DisplayFile: React.FC<{ file: Dependency[], useBase:boolean }> = ({ file, useBase}) => {
   return (
     <div className="foundDeps">
       {file.map((dep) => {
+        if (!useBase) {
+          return <DisplayDep dep={dep} />;
+        }
         //check if the dependency is in the baseline
         const found = baseLine.find((baseDep) => {
           return baseDep.name === dep.name;
@@ -88,6 +92,7 @@ const DisplayAll: React.FC<{ files: String[] }> = ({ files }) => {
 export function Home() {
   const [file, setFile] = useState<Image[]>([]);
   const [search, setSearch] = useState("");
+  const [useBase, setUseBase] = useState<boolean>(false);
 
   useEffect(() => {
     fetch(
@@ -143,23 +148,28 @@ export function Home() {
                 <ImageSearchIcon fontSize="large" className="icon" />
               </span>
             </Tooltip>
+            {/* {<input type="checkbox" name="checkiewhackie" id="useBase" onClick={() => setUseBase(!useBase)} />} */}
+            <Switch defaultChecked={useBase} color="secondary" onChange={() => setUseBase(!useBase)}/>
+
           </div>
+          <div className="accHolder">
           {file.map((image) => {
             return (
               <>
-                <Accordion className="acc" sx={{ bgcolor: "#d3d3d3" }}>
+                <Accordion className="acc" sx={{ bgcolor: "#d3d3d3"}}>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <div>
                       <h1 className="image-name">{image.name}</h1>
                     </div>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <DisplayFile file={image.dependencies} />
+                    <DisplayFile file={image.dependencies} useBase={useBase} />
                   </AccordionDetails>
                 </Accordion>
               </>
             );
           })}
+          </div>
         </div>
       </div>
     </>
