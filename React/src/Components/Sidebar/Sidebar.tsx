@@ -19,6 +19,7 @@ const Side: React.FC<{ item: SideItem[] }> = ({ item }) => {
 
   return (
     <div className="sidebar">
+      <div className="sideSpacer"></div>
       {item.map((sideItem) => {
         return (
           <div
@@ -47,7 +48,7 @@ export function Sidebar() {
           name: "Edit Baseline",
           icon: <ImageSearchIcon fontSize="large" />,
           Link: "/edit",
-        }
+        },
       ]}
     />
   );

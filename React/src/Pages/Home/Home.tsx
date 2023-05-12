@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import baseline from "../../assets/baseline.json";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
@@ -11,7 +11,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import Tooltip from "@mui/material/Tooltip";
-import Switch from '@mui/material/Switch';
+import Switch from "@mui/material/Switch";
+import { duration } from "@mui/material";
 
 interface Dependency {
   name: string;
@@ -34,7 +35,10 @@ const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
   );
 };
 
-const DisplayFile: React.FC<{ file: Dependency[], useBase:boolean }> = ({ file, useBase}) => {
+const DisplayFile: React.FC<{ file: Dependency[]; useBase: boolean }> = ({
+  file,
+  useBase,
+}) => {
   return (
     <div className="foundDeps">
       {file.map((dep) => {
@@ -94,6 +98,39 @@ export function Home() {
   const [search, setSearch] = useState("");
   const [useBase, setUseBase] = useState<boolean>(false);
 
+  const ImageAccordions: React.FC = () => {
+    return (
+      <div className="accHolder">
+        {file.map((image) => {
+          return (
+            <>
+              <Accordion
+                className="acc"
+                sx={{
+                  bgcolor: "#d3d3d3",
+                  width: "90%",
+                  marginX: "2.5%",
+                  minWidth: "90%",
+                  maxWidth: "90%",
+                }}
+                square
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <div>
+                    <h1 className="image-name">{image.name}</h1>
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <DisplayFile file={image.dependencies} useBase={useBase} />
+                </AccordionDetails>
+              </Accordion>
+            </>
+          );
+        })}
+      </div>
+    );
+  };
+
   useEffect(() => {
     fetch(
       "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps"
@@ -149,30 +186,16 @@ export function Home() {
               </span>
             </Tooltip>
             {/* {<input type="checkbox" name="checkiewhackie" id="useBase" onClick={() => setUseBase(!useBase)} />} */}
-
           </div>
           <div className="check">
-              Filter baseline
-              <Switch defaultChecked={useBase} color="secondary" onChange={() => setUseBase(!useBase)}/>
+            Filter baseline
+            <Switch
+              defaultChecked={useBase}
+              color="secondary"
+              onChange={() => setUseBase(!useBase)}
+            />
           </div>
-          <div className="accHolder">
-          {file.map((image) => {
-            return (
-              <>
-                <Accordion className="acc" sx={{ bgcolor: "#d3d3d3"}}>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <div>
-                      <h1 className="image-name">{image.name}</h1>
-                    </div>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <DisplayFile file={image.dependencies} useBase={useBase} />
-                  </AccordionDetails>
-                </Accordion>
-              </>
-            );
-          })}
-          </div>
+          <ImageAccordions image={file[0]} />
         </div>
       </div>
     </>
