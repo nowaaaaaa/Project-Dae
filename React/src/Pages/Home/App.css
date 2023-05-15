@@ -2,22 +2,27 @@
   background-color: #fff;
   height: 100vh;
   width: 100vw;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: start;
   flex-direction: row;
+  overflow-x: hidden;
 }
 
 .sidebar {
   background-color: #948e8e;
   color: black;
   height: 100%;
-  width: 13%;
+  width: 14%;
+  min-width: 14%;
   display: flex;
   flex-direction: column;
   align-items: left;
   justify-content: start;
+  position: fixed;
+  top: 0;
 }
 
 .sideSpacer {
@@ -25,6 +30,7 @@
 }
 
 .main {
+  margin-left: 14%;
   background-color: #fff;
   color: black;
   height: fit-content;
@@ -106,12 +112,11 @@
   margin-right: 5px;
   height: 80px;
   margin-bottom: 5px;
-  width: 8%;
+  width: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: auto;
 }
 
 .info {
@@ -121,7 +126,8 @@
 
 .foundDeps {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, 8%);
+  grid-gap: 0px;
 }
 
 .depHolder {
@@ -214,4 +220,70 @@
 .check {
   align-self: center;
   margin-bottom: 1rem;
+}
+
+.accH {
+  width: 70%;
+}
+
+.AllImages {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.SingleImage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: rgba(160, 139, 139, 0.329) solid 1px;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  padding-top: 0;
+}
+
+.HeaderHolder {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.ImageHeader {
+  width: fit-content;
+  margin-bottom: .5rem;
+  font-size: xx-large;
+}
+
+.DepMap {
+  width: 95%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  justify-content: center;
+  max-height: 400px;
+  overflow-y: scroll;
+  border-radius: 5px;
+}
+
+.DepHolder {
+  background-color: #948e8e2f;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+  margin: 0px .5px 1px .5px;
+  padding: 0px 10px 0px 10px;
+  overflow: hidden;
+  height: 98%;
 }

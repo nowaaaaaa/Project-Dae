@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import baseline from "../../assets/baseline.json";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import TextField from "@mui/material/TextField";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import SearchIcon from "@mui/icons-material/Search";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import Tooltip from "@mui/material/Tooltip";
 import Switch from "@mui/material/Switch";
-import { duration } from "@mui/material";
 
 interface Dependency {
   name: string;
@@ -26,69 +24,76 @@ interface Image {
 
 const baseLine = baseline as Dependency[];
 
-const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
+// const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
+//   return (
+//     <div className="dep">
+//       <p className="info">{dep.name}</p>
+//       <p className="info">{dep.version}</p>
+//     </div>
+//   );
+// };
+
+const AllImages: React.FC<{ file: Image[] }> = ({ file }) => {
   return (
-    <div className="dep">
-      <p className="info">{dep.name}</p>
-      <p className="info">{dep.version}</p>
+    <div className="AllImages">
+      {file.map((image) => {
+        return <SingleImage image={image} />;
+      })}
     </div>
   );
 };
 
-const DisplayFile: React.FC<{ file: Dependency[]; useBase: boolean }> = ({
-  file,
-  useBase,
-}) => {
+const SingleImage: React.FC<{ image: Image }> = ({ image }) => {
+  const [search, setSearch] = useState<string>("");
+  const [useBase, setBase] = useState<boolean>(true);
   return (
-    <div className="foundDeps">
-      {file.map((dep) => {
-        if (!useBase) {
-          return <DisplayDep dep={dep} />;
-        }
-        //check if the dependency is in the baseline
-        const found = baseLine.find((baseDep) => {
-          return baseDep.name === dep.name;
-        });
-        if (found) {
-          //if it is, check if the version is the same
-          if (found.version === dep.version) {
-            return <DisplayDep dep={dep} />;
+    <div className="SingleImage">
+      <div className="HeaderHolder">
+        <h1 className="ImageHeader">{image.name}</h1>
+        <TextField
+          autoComplete="d"
+          label="Search Dependencies"
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{ height: "50px" }}
+        />
+        <Tooltip title="Filter Baseline">
+          <Switch
+            color="secondary"
+            className="Switch"
+            defaultChecked={useBase}
+            onChange={() => setBase(!useBase)}
+          />
+        </Tooltip>
+      </div>
+      <div className="DepMap">
+        {image.dependencies.map((dep) => {
+          if (!useBase) {
+            if (search == "" || dep.name.includes(search)) {
+              return (
+                <div className="DepHolder">
+                  <p className="">{dep.name}</p>
+                  <p className="version">{dep.version}</p>
+                </div>
+              );
+            }
+          } else {
+            if (
+              baseLine.some(
+                (baseDep) =>
+                  baseDep.name === dep.name && baseDep.version === dep.version
+              ) &&
+              (search === "" || dep.name.includes(search))
+            ) {
+              return (
+                <div className="DepHolder">
+                  <p className="">{dep.name}</p>
+                  <p className="version">{dep.version}</p>
+                </div>
+              );
+            }
           }
-        }
-      })}
-    </div>
-  );
-};
-
-const DisplayOne: React.FC<{ file: String }> = ({ file }) => {
-  const [deps, setDeps] = useState<Dependency[]>([]);
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/SBOMs/${file}/dependencies`)
-      .then((response) => response.json())
-      .then((data) => setDeps(data));
-  }, []);
-  return (
-    <div>
-      {deps.map((dep) => {
-        return <DisplayDep dep={dep} />;
-      })}
-      ;
-    </div>
-  );
-};
-
-const DisplayAll: React.FC<{ files: String[] }> = ({ files }) => {
-  return (
-    <div>
-      {files.map((file) => {
-        return (
-          <>
-            <h1>{file}</h1>
-            <DisplayOne file={file} />
-          </>
-        );
-      })}
-      ;
+        })}
+      </div>
     </div>
   );
 };
@@ -98,38 +103,53 @@ export function Home() {
   const [search, setSearch] = useState("");
   const [useBase, setUseBase] = useState<boolean>(false);
 
-  const ImageAccordions: React.FC = () => {
-    return (
-      <div className="accHolder">
-        {file.map((image) => {
-          return (
-            <>
-              <Accordion
-                className="acc"
-                sx={{
-                  bgcolor: "#d3d3d3",
-                  width: "90%",
-                  marginX: "2.5%",
-                  minWidth: "90%",
-                  maxWidth: "90%",
-                }}
-                square
-              >
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <div>
-                    <h1 className="image-name">{image.name}</h1>
-                  </div>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <DisplayFile file={image.dependencies} useBase={useBase} />
-                </AccordionDetails>
-              </Accordion>
-            </>
-          );
-        })}
-      </div>
-    );
-  };
+  // const DisplayFile: React.FC<{ file: Dependency[] }> = ({ file }) => {
+  //   return (
+  //     <div className="foundDeps">
+  //       {file.map((dep) => {
+  //         if (!useBase) {
+  //           return <DisplayDep dep={dep} />;
+  //         }
+  //         //check if the dependency is in the baseline
+  //         const found = baseLine.find((baseDep) => {
+  //           return baseDep.name === dep.name;
+  //         });
+  //         if (found) {
+  //           //if it is, check if the version is the same
+  //           if (found.version === dep.version) {
+  //             return <DisplayDep dep={dep} />;
+  //           }
+  //         }
+  //       })}
+  //     </div>
+  //   );
+  // };
+
+  // const ImageAccordions: React.FC = () => {
+  //   return (
+  //     <div className="accHolder">
+  //       {file.map((image) => {
+  //         return (
+  //           <>
+  //             <Accordion
+  //               className="acc"
+  //               sx={{ width: "50%", bgcolor: "#eef9f5" }}
+  //             >
+  //               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+  //                 <div>
+  //                   <h1 className="image-name">{image.name}</h1>
+  //                 </div>
+  //               </AccordionSummary>
+  //               <AccordionDetails>
+  //                 <DisplayFile file={image.dependencies} />
+  //               </AccordionDetails>
+  //             </Accordion>
+  //           </>
+  //         );
+  //       })}
+  //     </div>
+  //   );
+  // };
 
   useEffect(() => {
     fetch(
@@ -149,7 +169,7 @@ export function Home() {
         <div className="main">
           <h1 className="image-name">Your Images:</h1>
           <div className="textFields">
-            <Tooltip title="Search Dependencies">
+            {/* <Tooltip title="Search Dependencies">
               <span
                 onClick={() => {
                   fetch(
@@ -164,7 +184,7 @@ export function Home() {
               >
                 <FindInPageIcon fontSize="large" className="icon" />
               </span>
-            </Tooltip>
+            </Tooltip> */}
             <TextField
               label="Search Images"
               onChange={(e) => setSearch(e.target.value)}
@@ -185,17 +205,16 @@ export function Home() {
                 <ImageSearchIcon fontSize="large" className="icon" />
               </span>
             </Tooltip>
-            {/* {<input type="checkbox" name="checkiewhackie" id="useBase" onClick={() => setUseBase(!useBase)} />} */}
           </div>
-          <div className="check">
+          {/* <div className="check">
             Filter baseline
             <Switch
               defaultChecked={useBase}
               color="secondary"
               onChange={() => setUseBase(!useBase)}
             />
-          </div>
-          <ImageAccordions image={file[0]} />
+          </div> */}
+          <AllImages file={file} />
         </div>
       </div>
     </>
