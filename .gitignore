@@ -152,3 +152,4 @@ cython_debug/
 #.idea/
 
 obj/
+Backend/obj/Debug/net6.0/project.razor.json
