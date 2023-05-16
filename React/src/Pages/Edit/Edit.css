@@ -1,0 +1,18 @@
+.baselineHolder {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ca3030;
+}
+
+.add {
+    background-color: #d3d3d3;
+    border-radius: 50%;
+    transition: 150ms;
+}
+
+.add:hover {
+    background-color: #a9a9a9;
+    transition: 150ms;
+}

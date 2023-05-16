@@ -126,8 +126,7 @@
 
 .foundDeps {
   display: grid;
-  grid-template-columns: repeat(6, 8%);
-  grid-gap: 0px;
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .depHolder {
