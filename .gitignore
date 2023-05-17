@@ -154,3 +154,5 @@ cython_debug/
 obj/
 Backend/obj/Debug/net6.0/project.razor.json
 Backend/obj/Debug/net6.0/Program.assets.cache
+*.json
+*.cache

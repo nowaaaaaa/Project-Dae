@@ -6,6 +6,7 @@ import "./Edit.css";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
 
 interface Dependency {
   name: string;
@@ -15,7 +16,7 @@ interface Dependency {
 
 interface BaselineItem {
   name: string;
-  versions: Version[];
+  versions: Version;
 }
 
 interface Version {
@@ -25,20 +26,16 @@ interface Version {
 
 const a: BaselineItem = {
   name: "bal",
-  versions: [
-    {
-      versions: ["1.0.0", "1.0.1"],
-      ranges: [
-        ["1.0.0", "1.0.1"],
-        ["1.0.0", "1.0.1"],
-      ],
-    },
-  ],
+  versions: {
+    versions: ["1.0.0", "1.0.1"],
+    ranges: [
+      ["1.0.0", "1.0.1"],
+      ["1.0.0", "1.0.1"],
+    ],
+  },
 };
 
 //const baseLine = baseline as Dependency[];
-
-const test = ["bal", "bal", "bal"];
 
 const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
   const [e, setE] = useState<boolean>(true);
@@ -106,12 +103,10 @@ export function Edit() {
             ...baseLine,
             {
               name: "Add Name",
-              versions: [
-                {
-                  versions: ["Version"],
-                  ranges: [["Range Start", "Range End"]],
-                },
-              ],
+              versions: {
+                versions: [],
+                ranges: [],
+              },
             },
           ]);
           console.log(baseLine);
@@ -128,30 +123,70 @@ export function Edit() {
     return (
       <div className="baselineHolder">
         {baseline.map((item) => {
+          const [name, setName] = useState<string>(item.name);
+          const [version, setVersion] = useState<string[]>(
+            item.versions.versions.map((version) => version)
+          );
+          const [ranges, setRanges] = useState<string[][]>(
+            item.versions.ranges.map((range) => range)
+          );
           return (
-            <div className="baselineItem">
-              <h1>{item.name}</h1>
-              <div className="baselineVersions">
-                {item.versions.map((version) => {
+            <>
+              <div>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div>
+                {version.map((version) => {
+                  return (
+                    <input type="text" value={version} onChange={(e) => {}} />
+                  );
+                })}
+                <span
+                  onClick={() =>
+                    setVersion((prevVersion) => [...prevVersion, "v1"])
+                  }
+                >
+                  <AddIcon />
+                </span>
+              </div>
+              <div>
+                {ranges.map((range) => {
                   return (
                     <>
-                      <div>
-                        {version.versions.map((v) => {
-                          return <input type="text" placeholder={v} />;
-                        })}
-                      </div>
-                      <div>
-                        {version.ranges.map((r) => {
-                          return r.map((v) => {
-                            return <input type="text" placeholder={v} />;
-                          });
-                        })}
-                      </div>
+                      <input type="text" value={range[0]} />
+                      <input type="text" value={range[1]} />
                     </>
                   );
                 })}
+                <span
+                  onClick={() =>
+                    setRanges((prevRange) => [
+                      ...prevRange,
+                      ["Range Start", "Range End"],
+                    ])
+                  }
+                >
+                  <AddIcon />
+                </span>
               </div>
-            </div>
+              <div>
+                <SaveIcon
+                  onClick={() =>
+                    setBaseLine((prevBase) => [
+                      ...prevBase,
+                      {
+                        name: name,
+                        versions: { versions: version, ranges: ranges },
+                      },
+                    ])
+                  }
+                />
+              </div>
+            </>
           );
         })}
         <AddItem />
