@@ -58,19 +58,6 @@
   justify-content: start;
   transition: 100ms;
   cursor: pointer;
-  padding-left: 1rem;
-}
-
-.side-item-active {
-  display: flex;
-  flex-direction: row;
-  height: 50px;
-  width: 100%;
-  align-items: center;
-  justify-content: start;
-  transition: 100ms;
-  cursor: pointer;
-  background-color: #d3d3d3;
 }
 
 .side-item:hover {

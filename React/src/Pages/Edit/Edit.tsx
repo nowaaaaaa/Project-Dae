@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
+import { BaselineComponent } from "../../Components/Old/Test";
 
 interface Dependency {
   name: string;
@@ -81,6 +82,23 @@ const DisplayFile: React.FC<{ file: Dependency[] }> = ({ file }) => {
   );
 };
 
+const baselineItems: BaselineItem[] = [
+  {
+    name: "Item 1",
+    versions: {
+      versions: ["Version 1", "Version 2"],
+      ranges: [["Range 1"], ["Range 2"]],
+    },
+  },
+  {
+    name: "Item 2",
+    versions: {
+      versions: ["Version 3"],
+      ranges: [["Range 3"]],
+    },
+  },
+];
+
 export function Edit() {
   const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
 
@@ -122,7 +140,7 @@ export function Edit() {
   }) => {
     return (
       <div className="baselineHolder">
-        {baseline.map((item) => {
+        {baseline.map((item, index) => {
           const [name, setName] = useState<string>(item.name);
           const [version, setVersion] = useState<string[]>(
             item.versions.versions.map((version) => version)
@@ -130,19 +148,45 @@ export function Edit() {
           const [ranges, setRanges] = useState<string[][]>(
             item.versions.ranges.map((range) => range)
           );
+
+          const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const newName = e.target.value;
+            setName(newName);
+          };
+
+          const handleVersionChange = (
+            e: React.ChangeEvent<HTMLInputElement>,
+            versionIndex: number
+          ) => {
+            const newVersion = [...version];
+            newVersion[versionIndex] = e.target.value;
+            setVersion(newVersion);
+          };
+
+          const handleRangeChange = (
+            e: React.ChangeEvent<HTMLInputElement>,
+            rangeIndex: number,
+            elementIndex: number
+          ) => {
+            const newRanges = [...ranges];
+            newRanges[rangeIndex][elementIndex] = e.target.value;
+            setRanges(newRanges);
+          };
+
           return (
-            <>
+            <div key={index}>
               <div>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <input type="text" value={name} onChange={handleNameChange} />
               </div>
               <div>
-                {version.map((version) => {
+                {version.map((version, versionIndex) => {
                   return (
-                    <input type="text" value={version} onChange={(e) => {}} />
+                    <input
+                      key={versionIndex}
+                      type="text"
+                      value={version}
+                      onChange={(e) => handleVersionChange(e, versionIndex)}
+                    />
                   );
                 })}
                 <span
@@ -154,12 +198,20 @@ export function Edit() {
                 </span>
               </div>
               <div>
-                {ranges.map((range) => {
+                {ranges.map((range, rangeIndex) => {
                   return (
-                    <>
-                      <input type="text" value={range[0]} />
-                      <input type="text" value={range[1]} />
-                    </>
+                    <div key={rangeIndex}>
+                      <input
+                        type="text"
+                        value={range[0]}
+                        onChange={(e) => handleRangeChange(e, rangeIndex, 0)}
+                      />
+                      <input
+                        type="text"
+                        value={range[1]}
+                        onChange={(e) => handleRangeChange(e, rangeIndex, 1)}
+                      />
+                    </div>
                   );
                 })}
                 <span
@@ -175,18 +227,16 @@ export function Edit() {
               </div>
               <div>
                 <SaveIcon
-                  onClick={() =>
-                    setBaseLine((prevBase) => [
-                      ...prevBase,
-                      {
-                        name: name,
-                        versions: { versions: version, ranges: ranges },
-                      },
-                    ])
-                  }
+                  onClick={() => {
+                    (baseLine[index] = {
+                      name: name,
+                      versions: { versions: version, ranges: ranges },
+                    }),
+                      console.log(baseLine);
+                  }}
                 />
               </div>
-            </>
+            </div>
           );
         })}
         <AddItem />
