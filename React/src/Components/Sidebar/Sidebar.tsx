@@ -13,10 +13,11 @@ const Side: React.FC<{ item: SideItem[] }> = ({ item }) => {
   return (
     <div className="sidebar">
       <div className="sideSpacer"></div>
-      {item.map((sideItem) => {
+      {item.map((sideItem, i) => {
         return (
           <div
             className="side-item"
+            key={i}
             onClick={() => window.location.replace(sideItem.Link)}
           >
             {sideItem.icon}

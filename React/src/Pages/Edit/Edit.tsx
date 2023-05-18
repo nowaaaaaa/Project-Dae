@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
-import baseline from "../../assets/baseline.json";
 import "../Home/App.css";
 import "./Edit.css";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
-import { BaselineComponent } from "../../Components/Old/Test";
-
-interface Dependency {
-  name: string;
-  version: string;
-  number?: number;
-}
+import { DisplayBaseline } from "../../Components/DisplayBaseline/DisplayBaseline";
 
 interface BaselineItem {
   name: string;
@@ -25,86 +16,22 @@ interface Version {
   ranges: string[][];
 }
 
-const a: BaselineItem = {
-  name: "bal",
-  versions: {
-    versions: ["1.0.0", "1.0.1"],
-    ranges: [
-      ["1.0.0", "1.0.1"],
-      ["1.0.0", "1.0.1"],
-    ],
-  },
-};
-
-//const baseLine = baseline as Dependency[];
-
-const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
-  const [e, setE] = useState<boolean>(true);
-  const handleInput = (e: boolean) => {
-    setE(!e);
-  };
-
-  return (
-    <>
-      <div className="depHolder">
-        <div
-          className="editHolder"
-          onClick={() => {
-            handleInput(e);
-          }}
-        >
-          <EditIcon className="edit" />
-        </div>
-        <form action="" className="depForm">
-          <input type="text" className="input" value={dep.name} disabled={e} />
-          <input
-            type="text"
-            className="input"
-            value={dep.version}
-            disabled={e}
-          />
-        </form>
-        <div className="deleteHolder">
-          <DeleteIcon className="delete" />
-        </div>
-      </div>
-    </>
-  );
-};
-
-const DisplayFile: React.FC<{ file: Dependency[] }> = ({ file }) => {
-  return (
-    <div className="foundDeps">
-      {file.map((dep) => {
-        return <DisplayDep dep={dep} />;
-      })}
-    </div>
-  );
-};
-
-const baselineItems: BaselineItem[] = [
-  {
-    name: "Item 1",
-    versions: {
-      versions: ["Version 1", "Version 2"],
-      ranges: [["Range 1"], ["Range 2"]],
-    },
-  },
-  {
-    name: "Item 2",
-    versions: {
-      versions: ["Version 3"],
-      ranges: [["Range 3"]],
-    },
-  },
-];
-
 export function Edit() {
   const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
 
+  useEffect(() => {
+    fetch(
+      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getBaseline"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setBaseLine(data);
+      });
+  }, []);
+
   const Fetch = (item: any) => {
     fetch(
-      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/putBaseline",
+      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/postBaseline",
       {
         method: "POST",
         body: JSON.stringify({ item }),
@@ -112,13 +39,16 @@ export function Edit() {
     );
   };
 
-  const AddItem: React.FC = () => {
+  const AddItem: React.FC<{
+    baseline: BaselineItem[];
+    setBaseline: React.Dispatch<React.SetStateAction<BaselineItem[]>>;
+  }> = ({ baseline, setBaseline }) => {
     return (
       <div
         className="addItem"
-        onClick={() => {
-          setBaseLine([
-            ...baseLine,
+        onClick={() =>
+          setBaseline([
+            ...baseline,
             {
               name: "Add Name",
               versions: {
@@ -126,18 +56,18 @@ export function Edit() {
                 ranges: [],
               },
             },
-          ]);
-          console.log(baseLine);
-        }}
+          ])
+        }
       >
         <AddIcon className="add" fontSize="large" />
       </div>
     );
   };
 
-  const DisplayBaseline: React.FC<{ baseline: BaselineItem[] }> = ({
-    baseline,
-  }) => {
+  const DisplayBaseline: React.FC<{
+    baseline: BaselineItem[];
+    setBaseline: React.Dispatch<React.SetStateAction<BaselineItem[]>>;
+  }> = ({ baseline, setBaseline }) => {
     return (
       <div className="baselineHolder">
         {baseline.map((item, index) => {
@@ -149,9 +79,14 @@ export function Edit() {
             item.versions.ranges.map((range) => range)
           );
 
-          const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const newName = e.target.value;
-            setName(newName);
+          const handleRangeChange = (
+            e: React.ChangeEvent<HTMLInputElement>,
+            rangeIndex: number,
+            elementIndex: number
+          ) => {
+            const newRanges = [...ranges];
+            newRanges[rangeIndex][elementIndex] = e.target.value;
+            setRanges(newRanges);
           };
 
           const handleVersionChange = (
@@ -163,21 +98,19 @@ export function Edit() {
             setVersion(newVersion);
           };
 
-          const handleRangeChange = (
-            e: React.ChangeEvent<HTMLInputElement>,
-            rangeIndex: number,
-            elementIndex: number
-          ) => {
-            const newRanges = [...ranges];
-            newRanges[rangeIndex][elementIndex] = e.target.value;
-            setRanges(newRanges);
+          const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const newName = e.target.value;
+            setName(newName);
           };
 
           return (
             <div key={index}>
+              {/* Dependency Name Field */}
               <div>
                 <input type="text" value={name} onChange={handleNameChange} />
               </div>
+              {/* End Name Field */}
+              {/* Version Field */}
               <div>
                 {version.map((version, versionIndex) => {
                   return (
@@ -197,6 +130,8 @@ export function Edit() {
                   <AddIcon />
                 </span>
               </div>
+              {/* End Version Field */}
+              {/* Range Field */}
               <div>
                 {ranges.map((range, rangeIndex) => {
                   return (
@@ -225,21 +160,24 @@ export function Edit() {
                   <AddIcon />
                 </span>
               </div>
+              {/* End Range Field */}
+              {/* Save Button */}
               <div>
                 <SaveIcon
                   onClick={() => {
-                    (baseLine[index] = {
+                    (baseline[index] = {
                       name: name,
                       versions: { versions: version, ranges: ranges },
                     }),
-                      console.log(baseLine);
+                      console.log(baseline);
                   }}
                 />
               </div>
+              {/* End Save Button */}
             </div>
           );
         })}
-        <AddItem />
+        <AddItem baseline={baseline} setBaseline={setBaseline} />
       </div>
     );
   };
@@ -249,7 +187,22 @@ export function Edit() {
       <div className="screen">
         <Sidebar />
         <div className="main">
-          <DisplayBaseline baseline={baseLine} />
+          <DisplayBaseline baseline={baseLine} setBaseline={setBaseLine} />
+          <div>
+            <button
+              onClick={() =>
+                fetch(
+                  `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/putBaseline?secret=DylanDarryl`,
+                  {
+                    method: "PUT",
+                    body: JSON.stringify({ baseLine }),
+                  }
+                )
+              }
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </>
