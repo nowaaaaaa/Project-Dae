@@ -135,32 +135,7 @@
   justify-content: center;
 }
 
-.editHolder {
-  background-color: #4fac01;
-  height: 100%;
-  border-radius: 10px;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  margin-right: 5px;
-  display: flex;
-  cursor: pointer;
-}
-
 .edit {
-  margin: auto;
-}
-
-.deleteHolder {
-  background-color: #db0b0b;
-  height: 100%;
-  border-radius: 10px;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-  display: flex;
-  cursor: pointer;
-}
-
-.delete {
   margin: auto;
 }
 
