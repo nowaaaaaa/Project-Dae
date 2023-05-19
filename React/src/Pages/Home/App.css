@@ -58,6 +58,7 @@
   justify-content: start;
   transition: 100ms;
   cursor: pointer;
+  /* padding-left: 1rem; */
 }
 
 .side-item:hover {
