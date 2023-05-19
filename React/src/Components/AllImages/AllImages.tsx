@@ -42,30 +42,36 @@ const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
   );
 };
 
-const SingleImage: React.FC<{ image: Image; depSearch: string }> = ({
-  image,
-  depSearch: allDepSearch,
-}) => {
+const SingleImage: React.FC<{
+  image: Image;
+  depSearch: string;
+}> = ({ image, depSearch: allDepSearch }) => {
   const [imageDepSearch, setSearch] = useState<string>("");
   const [useBase, setBase] = useState<boolean>(true);
   return (
     <div className="SingleImage">
       <div className="HeaderHolder">
-        <h1 className="ImageHeader">{image.name}</h1>
-        <TextField
-          autoComplete="d"
-          label="Search Dependencies"
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{ height: "50px" }}
-        />
-        <Tooltip title="Filter Baseline">
-          <Switch
-            color="secondary"
-            className="Switch"
-            defaultChecked={useBase}
-            onChange={() => setBase(!useBase)}
+        <div className="HeaderItem">
+          <h1 className="ImageHeader">{image.name}</h1>
+        </div>
+        <div className="HeaderItem">
+          <TextField
+            className="SearchDep"
+            label="Search Dependencies"
+            onChange={(e) => setSearch(e.target.value)}
+            sx={{ height: "50px" }}
           />
-        </Tooltip>
+        </div>
+        <div className="HeaderItem">
+          <Tooltip title="Filter Baseline" className="Switch">
+            <Switch
+              color="secondary"
+              className="Switch"
+              defaultChecked={useBase}
+              onChange={() => setBase(!useBase)}
+            />
+          </Tooltip>
+        </div>
       </div>
       <div className="DepMap">
         {image.dependencies.map((dep) => {
