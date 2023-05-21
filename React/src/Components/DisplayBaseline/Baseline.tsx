@@ -1,4 +1,5 @@
 import React from "react";
+import "./Baseline.css";
 
 interface BaselineItem {
   name: string;
@@ -76,63 +77,77 @@ export const Baseline: React.FC<{
   };
 
   return (
-    <div>
+    <div className="BaselineMap">
       {baseline.map((item, itemIndex) => (
-        <div key={itemIndex}>
-          <input
-            type="text"
-            value={item.name}
-            onChange={(event) => handleChangeName(itemIndex, event)}
-            placeholder="Enter name"
-          />
-          <ul>
-            {item.versions.versions.map((version, versionIndex) => (
-              <li key={versionIndex}>
-                <input
-                  type="text"
-                  value={version}
-                  onChange={(event) =>
-                    handleChangeVersion(itemIndex, versionIndex, event)
-                  }
-                  placeholder="Enter version"
-                />
-              </li>
-            ))}
-          </ul>
-          <button onClick={() => handleAddVersion(itemIndex)}>
+        <div key={itemIndex} className="BaselineItem">
+          <div className="NameHolder">
+            <input
+              className="NameInput"
+              type="text"
+              value={item.name}
+              onChange={(event) => handleChangeName(itemIndex, event)}
+              placeholder="Enter name"
+            />
+          </div>
+          <div className="VersionsHolder">
+            <ul className="Versions">
+              {item.versions.versions.map((version, versionIndex) => (
+                <li key={versionIndex}>
+                  <input
+                    type="text"
+                    value={version}
+                    onChange={(event) =>
+                      handleChangeVersion(itemIndex, versionIndex, event)
+                    }
+                    placeholder="Enter version"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+          <button
+            onClick={() => handleAddVersion(itemIndex)}
+            className="Button"
+          >
             Add Version
           </button>
-
-          <ul>
-            {item.versions.ranges.map((rangeArray, rangeIndex) => (
-              <li key={rangeIndex}>
-                <input
-                  type="text"
-                  value={rangeArray[0]}
-                  onChange={(event) =>
-                    handleChangeRangeStart(itemIndex, rangeIndex, event)
-                  }
-                  placeholder="Enter range start"
-                />
-                <input
-                  type="text"
-                  value={rangeArray[1]}
-                  onChange={(event) =>
-                    handleChangeRangeEnd(itemIndex, rangeIndex, event)
-                  }
-                  placeholder="Enter range end"
-                />
-                {rangeIndex === item.versions.ranges.length - 1 && (
-                  <button onClick={() => handleAddRange(itemIndex)}>
-                    Add Range
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
+          <div className="RangesHolder">
+            <ul className="Ranges">
+              {item.versions.ranges.map((rangeArray, rangeIndex) => (
+                <li key={rangeIndex} className="RangeLi">
+                  <input
+                    className="RangeStart"
+                    type="text"
+                    value={rangeArray[0]}
+                    onChange={(event) =>
+                      handleChangeRangeStart(itemIndex, rangeIndex, event)
+                    }
+                    placeholder="Enter range start"
+                  />
+                  <input
+                    className="RangeEnd"
+                    type="text"
+                    value={rangeArray[1]}
+                    onChange={(event) =>
+                      handleChangeRangeEnd(itemIndex, rangeIndex, event)
+                    }
+                    placeholder="Enter range end"
+                  />
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => handleAddRange(itemIndex)}
+              className="Button"
+            >
+              Add Range
+            </button>
+          </div>
         </div>
       ))}
-      <button onClick={handleAddBaselineItem}>Add Baseline Item</button>
+      <button onClick={handleAddBaselineItem} className="Button">
+        Add Baseline Item
+      </button>
     </div>
   );
 };

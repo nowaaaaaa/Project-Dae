@@ -34,7 +34,6 @@ export function Home() {
       <div className="screen">
         <Sidebar />
         <div className="main">
-          <h1 className="image-name">Your Images:</h1>
           <div className="textFields">
             <TextField
               label="Search Images"
