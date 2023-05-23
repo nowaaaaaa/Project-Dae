@@ -37,21 +37,22 @@ export function Edit() {
           <div>
             <button
               onClick={() => {
+                setLoading(true); //Loading aanzetten
                 fetch(
                   `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/putBaseline`,
                   {
                     method: "PUT",
                     body: JSON.stringify({ baseLine }),
                   }
-                ).then(() => setLoading(false));
-                setLoading(true);
+                ).then(() => setLoading(false)); //Loading uitzetten als de fetch klaar is
               }}
             >
               Save
             </button>
             {loading && (
               <div className="loader">
-                <CircularProgress></CircularProgress>
+                <CircularProgress size={"1rem"} />
+                {/*Loading icoontje als Loading aan staat, nog niet super goede plek maar dat komt wel*/}
               </div>
             )}
           </div>

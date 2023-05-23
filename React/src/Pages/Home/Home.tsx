@@ -26,7 +26,6 @@ interface Version {
 
 export function Home() {
   const [file, setFile] = useState<Image[]>([]);
-  const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
   const [searchImage, setSearchImage] = useState("");
   const [searchDep, setSearchDep] = useState("");
 
@@ -37,14 +36,7 @@ export function Home() {
       .then((response) => response.json())
       .then((data) => {
         setFile(data);
-      }),
-      fetch(
-        "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getBaseline"
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setBaseLine(data[0]["baseLine"]);
-        });
+      });
   }, []);
 
   return (
