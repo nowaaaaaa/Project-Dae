@@ -1,6 +1,6 @@
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import "../../Pages/Home/App.css";
+import "./Sidebar.css";
 import React from "react";
 
 interface SideItem {

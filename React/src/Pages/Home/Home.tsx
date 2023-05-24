@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./App.css";
+import "./Home.css";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
 import TextField from "@mui/material/TextField";
 import { AllImages } from "../../Components/AllImages/AllImages";
@@ -12,16 +12,6 @@ interface Dependency {
 interface Image {
   name: string;
   dependencies: Dependency[];
-}
-
-interface BaselineItem {
-  name: string;
-  versions: Version;
-}
-
-interface Version {
-  versions: string[];
-  ranges: [string, string][];
 }
 
 export function Home() {

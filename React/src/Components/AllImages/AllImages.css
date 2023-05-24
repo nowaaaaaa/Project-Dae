@@ -1,0 +1,92 @@
+.depHolder {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    outline: black solid 1px;
+    background-color: #d3d3d3;
+    border-radius: 10px;
+    margin: 3px;
+  }
+
+  .AllImages {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .SingleImage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border: rgba(160, 139, 139, 0.329) solid 1px;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    padding-top: 0;
+  }
+  
+  .HeaderHolder {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    margin-bottom: 1rem;
+    justify-content: center;
+  }
+  
+  .HeaderItem {
+    width: 33%;
+    height: 100%;
+    display: flex;
+  }
+  
+  .ImageHeader {
+    left: 1rem;
+    width: 25%;
+    margin-bottom: .5rem;
+    font-size: xx-large;
+    text-align: center;
+    text-overflow: hidden;
+    justify-self: end;
+    width: fit-content;
+  }
+  
+  .SearchDep {
+    left: 17%;
+  }
+  
+  .Switch {
+    left: 0px;
+    margin-left: 60%;
+  }
+  
+  .DepMap {
+    width: 95%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-content: center;
+    max-height: 400px;
+    overflow-y: scroll;
+    border-radius: 5px;
+  }
+  
+  .DepHolder {
+    background-color: #948e8e2f;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    margin: 0px .5px 1px .5px;
+    padding: 0px 10px 0px 10px;
+    overflow: hidden;
+    height: 98%;
+  }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../Pages/Home/App.css";
+import "./AllImages.css";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import Switch from "@mui/material/Switch";
