@@ -32,7 +32,10 @@ export const AllImages: React.FC<{
   return (
     <div className="AllImages">
       {file.map((image) => {
-        if (search === "" || image.name.includes(search)) {
+        if (
+          (search === "" || image.name.includes(search)) &&
+          image.dependencies.some((dep) => dep.name.includes(depSearch))
+        ) {
           return <SingleImage image={image} depSearch={depSearch} />;
         }
       })}

@@ -34,8 +34,9 @@ export function Edit() {
         <Sidebar />
         <div className="main">
           <Baseline baseline={baseLine} setBaseline={setBaseLine} />
-          <div>
+          <div className="ButtonHolder">
             <button
+              className="SaveButton"
               onClick={() => {
                 setLoading(true); //Loading aanzetten
                 fetch(

@@ -39,7 +39,6 @@
   flex-direction: column;
   align-items: start;
   justify-content: left;
-  padding-top: 2%;
 }
 
 .head {
@@ -157,12 +156,21 @@
 }
 
 .textFields {
+  position: absolute;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  background-color: transparent;
+  margin-left: 30%;
+  padding-top: 5px;
+  margin-top: 5px;
+  top: 0;
   justify-content: center;
-  width: 100%;
-  margin-bottom: 0.5rem;
+  align-items: center;
+  overflow-x: hidden;
+  z-index: 2;
+}
+
+.Spacer {
+  height: 3.5rem;
 }
 
 .icon:hover {
