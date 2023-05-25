@@ -39,7 +39,14 @@ def syft(Image):
 syft(input("Enter the name of the file: "))
 
 def GrypeIMG(Image):
-    os.system(f"grype {Image} --scope -all-layers")
+    try:
+        os.system(f"grype {Image} --scope -all-layers > {Image}Vulns.json")
+    except Exception as e:
+        print("Error:", e)
 
 def GrypeSBOM(SBOM_Name):
-    os.system(f"grype sbom:./{SBOM_Name} --scope -all-layers")
+    try:
+        os.system(f"grype sbom:./{SBOM_Name} --scope -all-layers > {SBOM_Name}Vulns.json")
+    except Exception as e:
+        print("Error:", e)
+        
