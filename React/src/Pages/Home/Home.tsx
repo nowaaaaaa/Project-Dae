@@ -3,8 +3,6 @@ import "./Home.css";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
 import TextField from "@mui/material/TextField";
 import { AllImages } from "../../Components/AllImages/AllImages";
-import { GrypeButton } from "../../Components/GrypeRun/Grype";
-
 interface Dependency {
   name: string;
   version: string;
@@ -54,7 +52,6 @@ export function Home() {
                 marginLeft: "10px",
               }}
             />
-            <GrypeButton />
           </div>
           <div className="Spacer"></div>
           <AllImages file={file} search={searchImage} depSearch={searchDep} />
