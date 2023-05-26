@@ -97,7 +97,7 @@ const SingleImage: React.FC<{
       </div>
       <div className="DepMap">
         {image.dependencies.map((dep) => {
-          if (!useBase) {
+          if (!useBase || allDepSearch !== "") {
             if (imageDepSearch !== "" && dep.name.includes(imageDepSearch)) {
               //Check for search within the image
               return <DisplayDep dep={dep} />;

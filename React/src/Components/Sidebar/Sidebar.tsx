@@ -12,7 +12,7 @@ interface SideItem {
 const Side: React.FC<{ item: SideItem[] }> = ({ item }) => {
   return (
     <div className="sidebar">
-      <div className="sideSpacer"></div>
+      <div className="sideSpacer" />
       {item.map((sideItem, i) => {
         return (
           <div
