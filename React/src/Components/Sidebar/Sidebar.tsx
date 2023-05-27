@@ -43,6 +43,11 @@ export function Sidebar() {
           icon: <ImageSearchIcon fontSize="large" />,
           Link: "/edit",
         },
+        {
+          name: "Search Dependencies",
+          icon: <ImageSearchIcon fontSize="large" />,
+          Link: "/dependencies",
+        },
       ]}
     />
   );
