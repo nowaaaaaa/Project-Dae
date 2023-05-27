@@ -54,7 +54,7 @@ export function Home() {
               }}
             />
           </div>
-          <div className="Spacer"></div>
+          <div className="Spacer" />
           <AllImages file={file} search={searchImage} depSearch={searchDep} />
         </div>
       </div>

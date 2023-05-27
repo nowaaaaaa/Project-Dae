@@ -22,3 +22,54 @@
     align-items: start;
     justify-content: left;
   }
+
+  .textFields {
+    position: absolute;
+    display: flex;
+    background-color: transparent;
+    margin-left: 30%;
+    padding-top: 5px;
+    margin-top: 5px;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    z-index: 2;
+  }
+
+  .SrcBtn {
+    margin-left: 1rem;
+    background-color: rgb(255, 255, 255);
+    border: black 2px solid;
+    color: black;
+  }
+
+  .Images {
+    margin-top: 2rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .img:nth-child(2) {
+    border-top: none;
+  }
+
+  .img:nth-child(even) {
+    background-color: rgba(230, 215, 215, 0.247);
+  }
+
+  .img {
+    margin: 0px;
+    width: 50%;
+    text-align: center;
+  }
+
+  .topText {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+  }
