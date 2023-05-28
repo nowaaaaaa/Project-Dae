@@ -1,5 +1,6 @@
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 import "./Sidebar.css";
 import React from "react";
 
@@ -14,9 +15,15 @@ const Side: React.FC<{ item: SideItem[] }> = ({ item }) => {
     <div className="sidebar">
       <div className="sideSpacer" />
       {item.map((sideItem, i) => {
+        var classname = "side-item";
+        if (sideItem.Link === window.location.pathname) {
+          classname += "-active";
+        }
+        console.log(sideItem.name);
+        console.log(classname);
         return (
           <div
-            className="side-item"
+            className={classname}
             key={i}
             onClick={() => window.location.replace(sideItem.Link)}
           >
@@ -40,7 +47,7 @@ export function Sidebar() {
         },
         {
           name: "Edit Baseline",
-          icon: <ImageSearchIcon fontSize="large" />,
+          icon: <BorderColorIcon fontSize="large" />,
           Link: "/edit",
         },
         {

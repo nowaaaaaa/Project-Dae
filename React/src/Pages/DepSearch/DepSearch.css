@@ -55,17 +55,13 @@
     align-items: center;
   }
 
-  .img:nth-child(2) {
-    border-top: none;
-  }
-
   .img:nth-child(even) {
     background-color: rgba(230, 215, 215, 0.247);
   }
 
   .img {
     margin: 0px;
-    width: 50%;
+    width: 75%;
     text-align: center;
   }
 
