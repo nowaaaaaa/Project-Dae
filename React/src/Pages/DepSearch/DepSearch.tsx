@@ -56,7 +56,7 @@ export function DepSearch() {
               className="SrcBtn"
               onClick={() => {
                 fetch(
-                  `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps?dep=${searchDep}`
+                  `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps?dep=${searchDep}&version=${searchVersion}`
                 )
                   .then((response) => response.json())
                   .then((data) => {
