@@ -7,6 +7,7 @@ import Switch from "@mui/material/Switch";
 interface Dependency {
   name: string;
   version: string;
+  purl: string;
 }
 
 interface Image {
@@ -45,9 +46,12 @@ export const AllImages: React.FC<{
 
 const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
   return (
-    <div className="DepHolder">
-      <p className="">{dep.name}</p>
-      <p className="version">{dep.version}</p>
+    <div>
+      <div className="DepHolder">
+        <p className="">{dep.name}</p>
+        <p className="version">{dep.version}</p>
+      </div>
+      <div>{dep.purl}</div>
     </div>
   );
 };

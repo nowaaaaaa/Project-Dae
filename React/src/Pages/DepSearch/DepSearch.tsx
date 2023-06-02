@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 interface Dependency {
   name: string;
   version: string;
+  purl: string;
 }
 
 interface Image {
@@ -27,6 +28,7 @@ export function DepSearch() {
   const [file, setFile] = useState<Image[]>([]);
   const [searchDep, setDep] = useState("");
   const [searchVersion, setVersion] = useState("");
+  const [DefiniteDep, setDefiniteDep] = useState("");
 
   return (
     <>
@@ -55,13 +57,16 @@ export function DepSearch() {
             <button
               className="SrcBtn"
               onClick={() => {
-                fetch(
-                  `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps?dep=${searchDep}&version=${searchVersion}`
-                )
-                  .then((response) => response.json())
-                  .then((data) => {
-                    setFile(data);
-                  });
+                {
+                  fetch(
+                    `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps?dep=${searchDep}&version=${searchVersion}`
+                  )
+                    .then((response) => response.json())
+                    .then((data) => {
+                      setFile(data);
+                    });
+                  setDefiniteDep(searchDep);
+                }
               }}
             >
               Search Images
@@ -72,7 +77,19 @@ export function DepSearch() {
             {file.map((image) => {
               return (
                 <div className="img">
-                  <p>{image.name}</p>
+                  <p>{image.name}:</p>
+                  {image.dependencies.map((dep) => {
+                    if (dep.name !== DefiniteDep) return <></>;
+                    return (
+                      <div className="DepInfo">
+                        {dep.name}
+                        <br />
+                        {dep.version}
+                        <br />
+                        {dep.purl}
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })}

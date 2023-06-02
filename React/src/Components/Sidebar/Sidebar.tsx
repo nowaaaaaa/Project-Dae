@@ -46,7 +46,7 @@ export function Sidebar() {
           Link: "/",
         },
         {
-          name: "Edit Baseline",
+          name: "Edit Filters",
           icon: <BorderColorIcon fontSize="large" />,
           Link: "/edit",
         },

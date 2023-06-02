@@ -35,7 +35,7 @@ def syft(Image):
     foundComponents = []
 
     for c in components['components']:
-        foundComponents.append({"name": c['name'], "version": c.get('version', ''), "purl": c['purl']})
+        foundComponents.append({"name": c['name'], "version": c.get('version', ''), "purl": c.get('purl', '')})
 
     upload = {
         "name": realImg,

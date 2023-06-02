@@ -7,6 +7,7 @@ import { AllImages } from "../../Components/AllImages/AllImages";
 interface Dependency {
   name: string;
   version: string;
+  purl: string;
 }
 
 interface Image {

@@ -62,10 +62,23 @@
   .img {
     margin: 0px;
     width: 75%;
-    text-align: center;
   }
 
   .topText {
     margin-top: 1rem;
     font-size: 1.5rem;
+  }
+
+  .DepInfo {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: start;
+    background-color: transparent;
+  }
+
+  .depText {
+    margin: 0;
   }
