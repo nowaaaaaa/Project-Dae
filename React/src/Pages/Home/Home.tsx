@@ -18,11 +18,15 @@ interface Image {
 export function Home() {
   const [file, setFile] = useState<Image[]>([]);
   const [searchImage, setSearchImage] = useState("");
+  
+  const [searchImageName, setSearchName] = useState("");
   const [searchDep, setSearchDep] = useState("");
+  const [searchVersionStart, setSearchVersionStart] = useState("");
+  const [searchVersionEnd, setSearchVersionEnd] = useState("");
 
   useEffect(() => {
     fetch(
-      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps"
+      `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchImageName}&dep=${searchDep}&versionStart=${searchVersionStart}&versionEnd=${searchVersionEnd}`
     )
       .then((response) => response.json())
       .then((data) => {
