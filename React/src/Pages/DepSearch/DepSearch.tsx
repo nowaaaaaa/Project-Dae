@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Sidebar } from "../../Components/Sidebar/Sidebar";
 import "./DepSearch.css";
 import TextField from "@mui/material/TextField";
+import { Tooltip } from "@mui/material";
 
 interface Dependency {
   name: string;
@@ -27,7 +28,8 @@ interface Version {
 export function DepSearch() {
   const [file, setFile] = useState<Image[]>([]);
   const [searchDep, setDep] = useState("");
-  const [searchVersion, setVersion] = useState("");
+  const [searchStartVersion, setStartVersion] = useState("");
+  const [searchEndVersion, setEndVersion] = useState("");
   const [DefiniteDep, setDefiniteDep] = useState("");
 
   return (
@@ -45,9 +47,20 @@ export function DepSearch() {
                 marginRight: "10px",
               }}
             />
+            <Tooltip title="Only fill the Start Version to search for versions lower than the input">
+              <TextField
+                label="Set Start Version"
+                onChange={(e) => setStartVersion(e.target.value)}
+                sx={{
+                  backgroundColor: "white",
+                  borderRadius: "5px",
+                  marginLeft: "10px",
+                }}
+              />
+            </Tooltip>
             <TextField
-              label="Set Version"
-              onChange={(e) => setVersion(e.target.value)}
+              label="Set End Version"
+              onChange={(e) => setEndVersion(e.target.value)}
               sx={{
                 backgroundColor: "white",
                 borderRadius: "5px",
@@ -59,7 +72,7 @@ export function DepSearch() {
               onClick={() => {
                 {
                   fetch(
-                    `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getDeps?dep=${searchDep}&version=${searchVersion}`
+                    `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange&dep=${searchDep}&versionStart=${searchStartVersion}&versionEnd=${searchEndVersion}`
                   )
                     .then((response) => response.json())
                     .then((data) => {
