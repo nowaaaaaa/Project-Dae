@@ -27,10 +27,10 @@ interface Version {
 
 export function DepSearch() {
   const [file, setFile] = useState<Image[]>([]);
+  const [searchName, setSearchName] = useState("");
   const [searchDep, setDep] = useState("");
   const [searchStartVersion, setStartVersion] = useState("");
   const [searchEndVersion, setEndVersion] = useState("");
-  const [DefiniteDep, setDefiniteDep] = useState("");
 
   return (
     <>
@@ -38,19 +38,37 @@ export function DepSearch() {
         <Sidebar />
         <div className="main">
           <div className="textFields">
-            <TextField
-              label="Search Dependeny"
-              onChange={(e) => setDep(e.target.value)}
-              sx={{
-                backgroundColor: "white",
-                borderRadius: "5px",
-                marginRight: "10px",
-              }}
-            />
-            <Tooltip title="Only fill the Start Version to search for versions lower than the input">
+            <Tooltip title='Enter dependency name'>
               <TextField
-                label="Set Start Version"
-                onChange={(e) => setStartVersion(e.target.value)}
+                label="Dependency Name"
+                onChange={(e) => {
+                  setDep(e.target.value);
+
+                  fetch(`https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${e.target.value}&versionStart=${searchStartVersion}&versionEnd=${searchEndVersion}`)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    setFile(data);
+                  });
+                }}
+                sx={{
+                  backgroundColor: "white",
+                  borderRadius: "5px",
+                  marginRight: "10px",
+                }}
+              />
+            </Tooltip>
+            <Tooltip title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Start"'>
+              <TextField
+                label="Version Range Start"
+                onChange={(e) => {
+                  setStartVersion(e.target.value);
+
+                  fetch(`https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${e.target.value}&versionEnd=${searchEndVersion}`)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    setFile(data);
+                  });
+                }}
                 sx={{
                   backgroundColor: "white",
                   borderRadius: "5px",
@@ -58,35 +76,44 @@ export function DepSearch() {
                 }}
               />
             </Tooltip>
-            <TextField
-              label="Set End Version"
-              onChange={(e) => setEndVersion(e.target.value)}
-              sx={{
-                backgroundColor: "white",
-                borderRadius: "5px",
-                marginLeft: "10px",
-              }}
-            />
-            <button
+            <Tooltip title='Leave "Version Range Start" empty for all versions smaller than or equal to "Version Range End"'>
+              <TextField
+                label="Version Range End"
+                onChange={(e) => {
+                  setEndVersion(e.target.value);
+
+                  fetch(`https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${searchStartVersion}&versionEnd=${e.target.value}`)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    setFile(data);
+                  });
+                }}
+                sx={{
+                  backgroundColor: "white",
+                  borderRadius: "5px",
+                  marginLeft: "10px",
+                }}
+              />
+            </Tooltip>
+            {/* <button
               className="SrcBtn"
               onClick={() => {
                 {
                   fetch(
-                    `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange&dep=${searchDep}&versionStart=${searchStartVersion}&versionEnd=${searchEndVersion}`
+                    `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${searchStartVersion}&versionEnd=${searchEndVersion}`
                   )
                     .then((response) => response.json())
                     .then((data) => {
                       setFile(data);
                     });
-                  setDefiniteDep(searchDep);
                 }
               }}
             >
               Search Images
-            </button>
+            </button> */}
           </div>
           <div className="Images">
-            <h1 className="topText">Images with dependency "{searchDep}":</h1>
+            <h1 className="topText">Images containing dependency "{searchDep}":</h1>
             {file.map((image) => {
               return (
                 <div className="img">
@@ -94,12 +121,12 @@ export function DepSearch() {
                   {image.dependencies.map((dep) => {
                     return (
                       <div className="DepInfo">
-                        {dep.name}
-                        <br />
-                        {dep.version}
-                        <br />
-                        {dep.purl}
-                      </div>
+                          {dep.name}
+                          <br />
+                          {dep.version}
+                          <br />
+                          {dep.purl}
+                        </div>
                     );
                   })}
                 </div>
