@@ -92,7 +92,6 @@ export function DepSearch() {
                 <div className="img">
                   <p>{image.name}:</p>
                   {image.dependencies.map((dep) => {
-                    if (dep.name !== DefiniteDep) return <></>;
                     return (
                       <div className="DepInfo">
                         {dep.name}
