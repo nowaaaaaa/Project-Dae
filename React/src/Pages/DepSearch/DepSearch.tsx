@@ -41,17 +41,17 @@ export function DepSearch() {
             <Tooltip title="Enter dependency name">
               <TextField
                 label="Dependency Name"
-                // onChange={(e) => {
-                //   setDep(e.target.value);
+                onChange={(e) => {
+                  setDep(e.target.value);
 
-                //   fetch(
-                //     `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${e.target.value}&versionStart=${searchStartVersion}&versionEnd=${searchEndVersion}`
-                //   )
-                //     .then((response) => response.json())
-                //     .then((data) => {
-                //       setFile(data);
-                //     });
-                // }}
+                  // fetch(
+                  //   `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${e.target.value}&versionStart=${searchStartVersion}&versionEnd=${searchEndVersion}`
+                  // )
+                  //   .then((response) => response.json())
+                  //   .then((data) => {
+                  //     setFile(data);
+                  //   });
+                }}
                 sx={{
                   backgroundColor: "white",
                   borderRadius: "5px",
@@ -62,17 +62,17 @@ export function DepSearch() {
             <Tooltip title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Start"'>
               <TextField
                 label="Version Range Start"
-                // onChange={(e) => {
-                //   setStartVersion(e.target.value);
+                onChange={(e) => {
+                  setStartVersion(e.target.value);
 
-                //   fetch(
-                //     `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${e.target.value}&versionEnd=${searchEndVersion}`
-                //   )
-                //     .then((response) => response.json())
-                //     .then((data) => {
-                //       setFile(data);
-                //     });
-                // }}
+                  // fetch(
+                  //   `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${e.target.value}&versionEnd=${searchEndVersion}`
+                  // )
+                  //   .then((response) => response.json())
+                  //   .then((data) => {
+                  //     setFile(data);
+                  //   });
+                }}
                 sx={{
                   backgroundColor: "white",
                   borderRadius: "5px",
@@ -83,17 +83,17 @@ export function DepSearch() {
             <Tooltip title='Leave "Version Range Start" empty for all versions smaller than or equal to "Version Range End"'>
               <TextField
                 label="Version Range End"
-                // onChange={(e) => {
-                //   setEndVersion(e.target.value);
+                onChange={(e) => {
+                  setEndVersion(e.target.value);
 
-                //   fetch(
-                //     `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${searchStartVersion}&versionEnd=${e.target.value}`
-                //   )
-                //     .then((response) => response.json())
-                //     .then((data) => {
-                //       setFile(data);
-                //     });
-                // }}
+                  // fetch(
+                  //   `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${searchStartVersion}&versionEnd=${e.target.value}`
+                  // )
+                  //   .then((response) => response.json())
+                  //   .then((data) => {
+                  //     setFile(data);
+                  //   });
+                }}
                 sx={{
                   backgroundColor: "white",
                   borderRadius: "5px",
