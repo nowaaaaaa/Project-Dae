@@ -105,8 +105,17 @@ export function DepSearch() {
               className="SrcBtn"
               onClick={() => {
                 {
+                  if (searchStartVersion === "") {
+                    setStartVersion("any");
+                  }
+                  if (searchEndVersion === "") {
+                    setEndVersion("any");
+                  }
+                  if (searchDep === "") {
+                    setDep("any");
+                  }
                   fetch(
-                    `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${searchStartVersion}&versionEnd=${searchEndVersion}`
+                    `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDep}/${searchStartVersion}/${searchEndVersion}`
                   )
                     .then((response) => response.json())
                     .then((data) => {
@@ -125,7 +134,9 @@ export function DepSearch() {
             {file.map((image) => {
               return (
                 <div className="img">
-                  <p>{image.name}:</p>
+                  <p>
+                    <b>{image.name}:</b>
+                  </p>
                   {image.dependencies.map((dep) => {
                     return (
                       <div className="DepInfo">

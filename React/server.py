@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
 
@@ -33,8 +33,8 @@ def get_collections(database):
 
     return collections
 
-@app.route('/api/<database>/<collection>/dependencies')
-def get_dependencies(database, collection):
+@app.route('/api/<database>/<collection>/dependencies/<depName>/<vStart>/<vEnd>')
+def get_dependencies(database, collection, depName, vStart, vEnd):
     # Connect to the MongoDB server
     client = MongoClient(uri)
 
@@ -42,16 +42,50 @@ def get_dependencies(database, collection):
 
     collection = db[collection]
 
-    dependencies = []
+    foundDeps = []
 
-    for dependency in collection.find():
-        output = {
-            "name": dependency.get('name'),
-            "version": dependency.get('version')
-        }
-        dependencies.append(output)
+    for image in collection.find():
+        deps = image.get("dependencies")
+        foundDeps.append({"dependencies": [], "name": image.get("name")})
+        for dep in deps:
+            if (dep.get("name") == depName or depName == "any"):
+                if ((vStart <= dep.get("version") <= vEnd) and (vStart != "any" and vEnd != "any")):
+                    output = {
+                        "name": dep.get("name"),
+                        "version": dep.get("version"),
+                        "purl": dep.get('purl')
+                    }
+                    foundDeps[-1]["dependencies"].append(output)
+                elif (vStart == "any" and vEnd == "any"):
+                    output = {
+                        "name": dep.get('name'),
+                        "version": dep.get('version'),
+                        "purl": dep.get('purl')
+                    }
+                    foundDeps[-1]["dependencies"].append(output)
+                elif (vStart == "any" and (dep.get("version") <= vEnd)):
+                    output = {
+                        "name": dep.get('name'),
+                        "version": dep.get('version'),
+                        "purl": dep.get('purl')
+                    }
+                    foundDeps[-1]["dependencies"].append(output)
+                elif (vEnd == "any" and (dep.get("version") >= vStart)):
+                    output = {
+                        "name": dep.get('name'),
+                        "version": dep.get('version'),
+                        "purl": dep.get('purl')
+                    }
+                    foundDeps[-1]["dependencies"].append(output)
 
-    return dependencies
+    # for dependency in collection.find():
+    #     output = {
+    #         "name": dependency.get('name'),
+    #         "version": dependency.get('version')
+    #     }
+    #     dependencies.append(output)
+
+    return jsonify(foundDeps)
 
 if __name__ == '__main__':
     app.run()
