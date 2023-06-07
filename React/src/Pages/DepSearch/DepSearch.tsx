@@ -32,6 +32,26 @@ export function DepSearch() {
   const [searchStartVersion, setStartVersion] = useState("");
   const [searchEndVersion, setEndVersion] = useState("");
 
+  const handleClick = () => {
+    if (searchStartVersion === "") {
+      setStartVersion("any");
+    }
+    if (searchEndVersion === "") {
+      setEndVersion("any");
+    }
+    if (searchDep === "") {
+      setDep("any");
+    }
+
+    fetch(
+      `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDep}/${searchStartVersion}/${searchEndVersion}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setFile(data);
+      });
+  };
+
   return (
     <>
       <div className="screen">
@@ -105,22 +125,7 @@ export function DepSearch() {
               className="SrcBtn"
               onClick={() => {
                 {
-                  if (searchStartVersion === "") {
-                    setStartVersion("any");
-                  }
-                  if (searchEndVersion === "") {
-                    setEndVersion("any");
-                  }
-                  if (searchDep === "") {
-                    setDep("any");
-                  }
-                  fetch(
-                    `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDep}/${searchStartVersion}/${searchEndVersion}`
-                  )
-                    .then((response) => response.json())
-                    .then((data) => {
-                      setFile(data);
-                    });
+                  handleClick();
                 }
               }}
             >
@@ -132,6 +137,9 @@ export function DepSearch() {
               Images containing dependency "{searchDep}":
             </h1>
             {file.map((image) => {
+              if (image.dependencies.length === 0) {
+                return <></>;
+              }
               return (
                 <div className="img">
                   <p>
