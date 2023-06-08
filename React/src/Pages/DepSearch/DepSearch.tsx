@@ -27,24 +27,18 @@ interface Version {
 
 export function DepSearch() {
   const [file, setFile] = useState<Image[]>([]);
-  const [searchName, setSearchName] = useState("");
+  // const [searchName, setSearchName] = useState("");
   const [searchDep, setDep] = useState("");
   const [searchStartVersion, setStartVersion] = useState("");
   const [searchEndVersion, setEndVersion] = useState("");
 
   const handleClick = () => {
-    if (searchStartVersion === "") {
-      setStartVersion("any");
-    }
-    if (searchEndVersion === "") {
-      setEndVersion("any");
-    }
-    if (searchDep === "") {
-      setDep("any");
-    }
+    const searchDepText = searchDep || "any";
+    const searchStartVersionText = searchStartVersion || "any";
+    const searchEndVersionText = searchEndVersion || "any";
 
     fetch(
-      `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDep}/${searchStartVersion}/${searchEndVersion}`
+      `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -62,15 +56,9 @@ export function DepSearch() {
               <TextField
                 label="Dependency Name"
                 onChange={(e) => {
-                  setDep(e.target.value);
-
-                  // fetch(
-                  //   `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${e.target.value}&versionStart=${searchStartVersion}&versionEnd=${searchEndVersion}`
-                  // )
-                  //   .then((response) => response.json())
-                  //   .then((data) => {
-                  //     setFile(data);
-                  //   });
+                  {
+                    setDep(e.target.value);
+                  }
                 }}
                 sx={{
                   backgroundColor: "white",
@@ -83,15 +71,9 @@ export function DepSearch() {
               <TextField
                 label="Version Range Start"
                 onChange={(e) => {
-                  setStartVersion(e.target.value);
-
-                  // fetch(
-                  //   `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${e.target.value}&versionEnd=${searchEndVersion}`
-                  // )
-                  //   .then((response) => response.json())
-                  //   .then((data) => {
-                  //     setFile(data);
-                  //   });
+                  {
+                    setStartVersion(e.target.value);
+                  }
                 }}
                 sx={{
                   backgroundColor: "white",
@@ -104,15 +86,9 @@ export function DepSearch() {
               <TextField
                 label="Version Range End"
                 onChange={(e) => {
-                  setEndVersion(e.target.value);
-
-                  // fetch(
-                  //   `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getRange?name=${searchName}&dep=${searchDep}&versionStart=${searchStartVersion}&versionEnd=${e.target.value}`
-                  // )
-                  //   .then((response) => response.json())
-                  //   .then((data) => {
-                  //     setFile(data);
-                  //   });
+                  {
+                    setEndVersion(e.target.value);
+                  }
                 }}
                 sx={{
                   backgroundColor: "white",
