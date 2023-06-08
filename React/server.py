@@ -125,17 +125,23 @@ from pymongo import MongoClient
 #     return jsonify(foundDeps)
 
 def compareVersions(version, start, end):
-    version = splitVersion(version)
-    start = splitVersion(start)
-    end = splitVersion(end)
     less = False
     more = False
+    version = splitVersion(version)
+    if (start == "any"):
+        more = True
+    else:
+        start = splitVersion(start)
+    if (end == "any"):
+        less = True
+    else:
+        end = splitVersion(end)
     for i in range(len(version)):
         if (not more and i == len(version)-1 and version[i] == start[i] and len(version) < len(start)):
             return False
         if (not less and i == len(end)-1 and version[i] == end[i] and len(end) < len(version)):
             return False
-        if (not more and (version[i] > start[i]) or (version[i] == start[i] and len(version) > len(start))):
+        if (not more and (version[i] > start[i] or (version[i] == start[i] and len(version) > len(start)))):
             more = True
         if (not less and (version[i] < end[i] or (version[i] == end[i] and len(version) < len(end)))):
             less = True
