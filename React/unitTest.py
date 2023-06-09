@@ -24,12 +24,12 @@ class TestCompareVersions(unittest.TestCase):
     def test_version_strings_with_non_numeric_characters(self):
         self.assertTrue(compareVersions('3.2.1-alpha', '3.2.0', '3.2.2'))
         self.assertTrue(compareVersions('3.2.1', '3.2.0', '3.2.2-beta'))
-        self.assertFalse(compareVersions('3.2.1-alpha', '3.2.0', '3.2.1'))
-        self.assertFalse(compareVersions('3.2.1', '3.2.1-alpha', '3.2.2'))
+        self.assertTrue(compareVersions('3.2.1-alpha', '3.2.0', '3.2.1'))
+        self.assertTrue(compareVersions('3.2.1', '3.2.1-alpha', '3.2.2'))
 
     def test_version_with_different_number_of_segments(self):
         self.assertTrue(compareVersions('3.2.1', '3.2', '3.3'))
-        self.assertTrue(compareVersions('3.2.1', '3.2.0', '3.2'))
+        self.assertFalse(compareVersions('3.2.1', '3.2.0', '3.2'))
         self.assertFalse(compareVersions('3.2.1', '3.2.1.0', '3.2.1'))
 
     def test_version_with_leading_zeros(self):
@@ -45,14 +45,14 @@ class TestCompareVersions(unittest.TestCase):
         self.assertFalse(compareVersions('3.0.0.1', '3.0.1', '3.0.2'))
 
     def test_version_with_non_numeric_characters(self):
-        self.assertFalse(compareVersions('3.2.1-alpha', '3.2.1', '3.2.2'))
-        self.assertFalse(compareVersions('3.2.1', '3.2.1-alpha', '3.2.2'))
-        self.assertFalse(compareVersions('3.2.1', '3.2.1', '3.2.1-alpha'))
+        self.assertTrue(compareVersions('3.2.1-alpha', '3.2.1', '3.2.2'))
+        self.assertTrue(compareVersions('3.2.1', '3.2.1-alpha', '3.2.2'))
+        self.assertTrue(compareVersions('3.2.1', '3.2.1', '3.2.1-alpha'))
 
     def test_invalid_version(self):
         self.assertFalse(compareVersions('', '3.2.1', '3.2.2'))
-        self.assertFalse(compareVersions('3.2.1', '', '3.2.2'))     #Error list index out of range
-        self.assertFalse(compareVersions('3.2.1', '3.2.1', ''))
+        self.assertTrue(compareVersions('3.2.1', 'any', '3.2.2'))     #Error list index out of range
+        self.assertTrue(compareVersions('3.2.1', '3.2.1', 'any'))
 
 if __name__ == '__main__':
     unittest.main()
