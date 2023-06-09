@@ -129,7 +129,6 @@ def compareVersions(version, start, end):
     less = False
     more = False
     version = splitVersion(version)
-
     if (start == "any"):
         more = True
     else:
@@ -141,17 +140,13 @@ def compareVersions(version, start, end):
     if (version == []):
         return False
     for i in range(len(version)):
-        print("i: " + str(i), "version: " + str(version[i]), "start: " + str(start[i]), "end: " + str(end[i]))
         if not more and ((i == len(version)-1 and len(version) < len(start) and version[i] == start[i]) or int(start[i]) > int(version[i])):
             return False
         if not less and ((i == len(end)-1 and len(end) < len(version) and version[i] == end[i]) or int(end[i]) < int(version[i])):
             return False
-        print(more, version[i], start[i])
         if not more and (int(version[i]) > int(start[i]) or (version[i] == start[i] and len(version) > len(start) and i == len(start)-1)):
-            print("more")
             more = True
         if not less and (int(version[i]) < int(end[i]) or (version[i] == end[i] and len(version) < len(end) and i == len(version)-1)):
-            print("less")
             less = True
         if (more and less):
             return True
