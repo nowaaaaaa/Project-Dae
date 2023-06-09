@@ -165,7 +165,11 @@ def splitVersion(version):
     if tempres != "":
         res.append(tempres)
     return res
-while True:
-    print(compareVersions(input(": "), input(": "), input(": ")))
+
+# while True:
+#     print(compareVersions(input(": "), input(": "), input(": ")))
+
+
+
 # if __name__ == '__main__':
 #     app.run()
