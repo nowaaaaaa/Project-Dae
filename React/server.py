@@ -124,10 +124,12 @@ from pymongo import MongoClient
 
 #     return jsonify(foundDeps)
 
+# NIET CALLEN ZONDER GETALLEN IN START OF END
 def compareVersions(version, start, end):
     less = False
     more = False
     version = splitVersion(version)
+
     if (start == "any"):
         more = True
     else:
@@ -136,10 +138,12 @@ def compareVersions(version, start, end):
         less = True
     else:
         end = splitVersion(end)
+    if (version == []):
+        return False
     for i in range(len(version)):
-        if (not more and i == len(version)-1 and version[i] == start[i] and len(version) < len(start)):
+        if (not more and i == len(version)-1 and len(version) < len(start)):
             return False
-        if (not less and i == len(end)-1 and version[i] == end[i] and len(end) < len(version)):
+        if (not less and i == len(end)-1 and len(end) < len(version)):
             return False
         if (not more and (version[i] > start[i] or (version[i] == start[i] and len(version) > len(start)))):
             more = True
