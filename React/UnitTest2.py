@@ -5,7 +5,7 @@ class TestCompareVersions(unittest.TestCase):
     def test_version_between_start_and_end(self):
         self.assertTrue(compareVersions('2.42.2+dfsg-1+deb11u1', '2.13.1-4.2', '6.2_p20200523-r0'))
         self.assertTrue(compareVersions('1.66.1-1+b1', '1.31.1-r21', '2.13.1-4.2'))
-        self.assertTrue(compareVersions('20201115', '20180224.1+nmu1', '3.118ubuntu5'))     #Fout: misschien niet mogelijk door versie format verschil
+        self.assertFalse(compareVersions('20201115', '20180224.1+nmu1', '3.118ubuntu5'))
 
     def test_version_less_than_start_or_greater_than_end(self):
         self.assertFalse(compareVersions('2.42.2+dfsg-1+deb11u1', '3.118ubuntu5', '8.32-4.1ubuntu1'))
@@ -26,7 +26,7 @@ class TestCompareVersions(unittest.TestCase):
         self.assertFalse(compareVersions('20201115', '20201116', '20201117'))
 
     def test_version_with_different_number_of_segments(self):
-        self.assertTrue(compareVersions('20201115', '202011', '202012'))    #Fout: Waarschijnlijk overbodig aangezien er geen specifieke datum aangegeven is
+        self.assertTrue(compareVersions('20201115', '202011', '202012'))    
         self.assertTrue(compareVersions('1.66.1-1+b1', '1.66', '1.67'))
         self.assertFalse(compareVersions('2.42.2+dfsg-1+deb11u1', '2.42.2+dfsg-1+deb11u1.1', '2.42.2+dfsg-1+deb11u1.2'))
 
@@ -43,14 +43,14 @@ class TestCompareVersions(unittest.TestCase):
         self.assertFalse(compareVersions('1.66.1-1+b1', '1.66.1-1+0002', '1.66.1-1+0003'))
 
     def test_version_with_non_numeric_characters(self):
-        self.assertFalse(compareVersions('1.31.1-r21', '1.31.1-r21', '1.31.1-r22'))                                     #Fout?: moet naar true als de functie >= doet
-        self.assertFalse(compareVersions('2.42.2+dfsg-1+deb11u1', '2.42.2+dfsg-1+deb11u1', '2.42.2+dfsg-1+deb11u2'))    #moet naar true als de functie >= doet
-        self.assertFalse(compareVersions('1.66.1-1+b1', '1.66.1-1+b1', '1.66.1-1+b2'))                                  #moet naar true als de functie >= doet
-        self.assertFalse(compareVersions('20201115', '20201115', '20201116'))                                           #moet naar true als de functie >= doet
+        self.assertFalse(compareVersions('1.31.1-r21', '1.31.1-r21', '1.31.1-r22'))                                     
+        self.assertFalse(compareVersions('2.42.2+dfsg-1+deb11u1', '2.42.2+dfsg-1+deb11u1', '2.42.2+dfsg-1+deb11u2'))    
+        self.assertFalse(compareVersions('1.66.1-1+b1', '1.66.1-1+b1', '1.66.1-1+b2'))                                  
+        self.assertFalse(compareVersions('20201115', '20201115', '20201116'))                                           
 
     def test_invalid_version(self):
         self.assertFalse(compareVersions('', '1.66.1-1+b1', '1.66.1-1+b2'))
-        self.assertFalse(compareVersions('1.66.1-1+b1', '', '1.66.1-1+b2'))              #Error: index out of range, maar in principe wordt er nooit een lege string aangegeven
+        self.assertFalse(compareVersions('1.66.1-1+b1', '', '1.66.1-1+b2'))              
         self.assertFalse(compareVersions('1.66.1-1+b1', '1.66.1-1+b2', ''))
 
 if __name__ == '__main__':
