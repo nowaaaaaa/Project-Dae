@@ -21,7 +21,7 @@ def syft(Image):
         print("Syft command not ran correctly.")
         os.remove(fileName)
         exit(1)
-
+    print("SBOM created")
     try:
         with open(fileName) as f:
             components = json.load(f)
@@ -41,14 +41,14 @@ def syft(Image):
         "name": realImg,
         "dependencies": foundComponents
     }
-
+    print("Uploading to MongoDB")
     try:
         client.get_database('sbomTest').get_collection(f"deps").insert_one(upload)
         print("Successfully added to MongoDB")
     except Exception as e:
         print(e)
     os.remove(fileName)
-    print("Successfully removed file")
+    #print("Successfully removed file")
 
 # syft(input("Enter the name of the file: "))
 if len(sys.argv) != 2:
