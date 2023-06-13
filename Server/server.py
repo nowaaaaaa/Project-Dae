@@ -44,29 +44,61 @@ def get_dependencies(database, collection, depName, vStart, vEnd):
 
     foundDeps = []
 
-    if ("." in vStart):
-        vSplitS = vStart.split(".")
-    else:
-        vSplitS = False
-    if ("." in vEnd):
-        vSplitE = vEnd.split(".")
-    else:
-        vSplitE = False
-
     for image in collection.find():
         deps = image.get("dependencies")
         foundDeps.append({"dependencies": [], "name": image.get("name")})
         for dep in deps:
             if (depName in dep.get("name") or depName == "any"):
-                result = {
-                    "name": dep.get("name"),
-                    "version": dep.get("version"),
-                    "purl": dep.get("purl"),
-                }
-                foundDeps[-1]["dependencies"].append(result)
+                if (compareVersions(dep.get("version"), vStart, vEnd)):
+                    result = {
+                        "name": dep.get("name"),
+                        "version": dep.get("version"),
+                        "purl": dep.get("purl"),
+                    }
+                    foundDeps[-1]["dependencies"].append(result)
 
 
     return jsonify(foundDeps)
 
 if __name__ == '__main__':
     app.run()
+
+def compareVersions(version, start, end):
+    less = False
+    more = False
+    version = splitVersion(version)
+    if (start == "any"):
+        more = True
+    else:
+        start = splitVersion(start)
+    if (end == "any"):
+        less = True
+    else:
+        end = splitVersion(end)
+    if (version == []):
+        return False
+    for i in range(len(version)):
+        if not more and ((i == len(version)-1 and len(version) < len(start) and version[i] == start[i]) or int(start[i]) > int(version[i])):
+            return False
+        if not less and ((i == len(end)-1 and len(end) < len(version) and version[i] == end[i]) or int(end[i]) < int(version[i])):
+            return False
+        if not more and (int(version[i]) > int(start[i]) or (version[i] == start[i] and len(version) > len(start) and i == len(start)-1)):
+            more = True
+        if not less and (int(version[i]) < int(end[i]) or (version[i] == end[i] and len(version) < len(end) and i == len(version)-1)):
+            less = True
+        if (more and less):
+            return True
+    return True
+
+def splitVersion(version):
+    res = []
+    tempres = ""
+    for i in version:
+        if (i.isdigit()):
+            tempres += i
+        elif tempres != "":
+            res.append(tempres)
+            tempres = ""
+    if tempres != "":
+        res.append(tempres)
+    return res
