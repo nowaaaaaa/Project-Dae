@@ -5,14 +5,20 @@ def compareVersions(version, start, end):
     more = False
     print(version, start, end)
     version = splitVersion(version)
+    if (version == []):
+        return True
     if (start == "any"):
         more = True
     else:
         start = splitVersion(start)
+        if (start == []):
+            return False
     if (end == "any"):
         less = True
     else:
         end = splitVersion(end)
+        if (end == []):
+            return False
     if (version == []):
         return False
     print(version, start, end)
