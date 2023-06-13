@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
+import re
 
 # app = Flask(__name__)
 # CORS(app)  # Enable CORS for all routes
@@ -164,6 +165,62 @@ def splitVersion(version):
     if tempres != "":
         res.append(tempres)
     return res
+
+def test(version_in_db: str, start: str = "", end: str = "") -> bool:
+    if version_in_db == "":
+        return False
+    if (start == "" and end == ""):
+        return True
+
+    # Split the version in the database, start, and end into lists of numbers
+    split_version_in_db = re.findall(r"[0-9]+", version_in_db)
+    split_start = re.findall(r"[0-9]+", start)
+    for i in range(len(split_start), len(split_version_in_db)):
+        split_start.append("0")
+
+    split_end = re.findall(r"[0-9]+", end)
+    for i in range(len(split_end), len(split_version_in_db)):
+        split_end.append("0")
+
+    for i in range(len(split_version_in_db), max(len(split_start), len(split_end))):
+        split_version_in_db.append("0")
+
+    for i in range(len(split_version_in_db)):
+        try:
+            while (len(split_start[i]) < len(split_version_in_db[i])):
+                split_start[i] = "0" + split_start[i]
+            if (split_start[i] < split_version_in_db[i]):
+                break
+            elif (split_start[i] > split_version_in_db[i]):
+                print(split_start[i], split_version_in_db[i])
+                return False
+        except:
+            continue
+
+    for i in range(len(split_version_in_db)):
+        try:
+            while (len(split_end[i]) < len(split_version_in_db[i])):
+                split_end[i] = "0" + split_end[i]
+            if (split_end[i] > split_version_in_db[i]):
+                break
+            elif (split_end[i] < split_version_in_db[i]):
+                return False
+        except:
+            continue
+
+    try:
+        if (split_start[len(split_version_in_db)] <= "0"):
+            return False
+    except:
+        pass
+
+    try:
+        if (split_end[len(split_version_in_db)] >= "0"):
+            return False
+    except:
+        pass
+
+    return True
 
 # while True:
 #     print(compareVersions(input(": "), input(": "), input(": ")))

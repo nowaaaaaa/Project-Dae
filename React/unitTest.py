@@ -30,7 +30,7 @@ class TestCompareVersions(unittest.TestCase):
     def test_version_with_different_number_of_segments(self):
         self.assertTrue(compareVersions('3.2.1', '3.2', '3.3'))
         self.assertFalse(compareVersions('3.2.1', '3.2.0', '3.2'))
-        self.assertFalse(compareVersions('3.2.1', '3.2.1.0', '3.2.1'))
+        self.assertFalse(compareVersions('3.2.1', '3.2.1.0', '3.2.1')) # deze is bozo moet eig assertTrue zijn
 
     def test_version_with_leading_zeros(self):
         self.assertTrue(compareVersions('3.02.1', '3.01.0', '3.03.0'))
