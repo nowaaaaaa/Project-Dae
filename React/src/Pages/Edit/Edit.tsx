@@ -3,6 +3,7 @@ import { Sidebar } from "../../Components/Sidebar/Sidebar";
 import "./Edit.css";
 import { Baseline } from "../../Components/DisplayBaseline/Baseline";
 import CircularProgress from "@mui/material/CircularProgress";
+import AddIcon from "@mui/icons-material/Add";
 import Select from "react-select";
 
 interface BaselineItem {
@@ -27,6 +28,7 @@ export function Edit() {
     "a",
     "basdsdgdfgdfgasddsdf",
   ]);
+  const [addItem, setAddItem] = useState<String>("");
   const [currentFilter, setFilter] = useState<String>("A");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -54,6 +56,17 @@ export function Edit() {
                 }
               })}
             />
+            <input type="text" onChange={(e) => setAddItem(e.target.value)} />
+            <span
+              className="AddIcon"
+              onClick={() => {
+                if (filterItems.includes(addItem) === false && addItem !== "") {
+                  setFilterItems([...filterItems, addItem]);
+                }
+              }}
+            >
+              <AddIcon />
+            </span>
           </div>
           <Baseline baseline={baseLine} setBaseline={setBaseLine} />
           <div className="ButtonHolder">
