@@ -65,4 +65,3 @@ def get_dependencies(database, collection, depName, vStart, vEnd):
 
 if __name__ == '__main__':
     app.run()
-
