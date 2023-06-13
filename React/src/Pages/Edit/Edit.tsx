@@ -3,6 +3,7 @@ import { Sidebar } from "../../Components/Sidebar/Sidebar";
 import "./Edit.css";
 import { Baseline } from "../../Components/DisplayBaseline/Baseline";
 import CircularProgress from "@mui/material/CircularProgress";
+import Select from "react-select";
 
 interface BaselineItem {
   name: string;
@@ -14,8 +15,19 @@ interface Version {
   ranges: [string, string][];
 }
 
+const options = [
+  { value: "chocolate", label: "Chocolate" },
+  { value: "strawberry", label: "Strawberry" },
+  { value: "vanilla", label: "Vanilla" },
+];
+
 export function Edit() {
   const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
+  const [filterItems, setFilterItems] = useState<String[]>([
+    "a",
+    "basdsdgdfgdfgasddsdf",
+  ]);
+  const [currentFilter, setFilter] = useState<String>("A");
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -33,6 +45,16 @@ export function Edit() {
       <div className="screen">
         <Sidebar />
         <div className="main">
+          <div className="FilterItems">
+            <Select
+              className="FilterSelect"
+              options={filterItems.map((item) => {
+                {
+                  return { value: item, label: item };
+                }
+              })}
+            />
+          </div>
           <Baseline baseline={baseLine} setBaseline={setBaseLine} />
           <div className="ButtonHolder">
             <button
