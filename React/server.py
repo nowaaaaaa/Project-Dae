@@ -166,59 +166,76 @@ def splitVersion(version):
         res.append(tempres)
     return res
 
-def test(version_in_db: str, start: str = "", end: str = "") -> bool:
+def test(version_in_db: str, start: str = "any", end: str = "any") -> bool:
     if version_in_db == "":
         return False
-    if (start == "" and end == ""):
+    if (start == "any" and end == "any"):
         return True
 
     # Split the version in the database, start, and end into lists of numbers
-    split_version_in_db = re.findall(r"[0-9]+", version_in_db)
-    split_start = re.findall(r"[0-9]+", start)
-    for i in range(len(split_start), len(split_version_in_db)):
-        split_start.append("0")
+    split_version_in_db = list(map(int, re.findall(r"[0-9]+", version_in_db)))
+    split_start = list(map(int, re.findall(r"[0-9]+", start)))
+    split_end = list(map(int, re.findall(r"[0-9]+", end)))
 
-    split_end = re.findall(r"[0-9]+", end)
-    for i in range(len(split_end), len(split_version_in_db)):
-        split_end.append("0")
-
-    for i in range(len(split_version_in_db), max(len(split_start), len(split_end))):
-        split_version_in_db.append("0")
+    for i in range(max(len(split_version_in_db), len(split_start), len(split_end))):
+        if (i >= len(split_version_in_db)):
+            split_version_in_db.append(0)
+        if (start != "any" and i >= len(split_start)):
+            split_start.append(0)
+        if (end != "any" and i >= len(split_end)):
+            split_end.append(0)
 
     for i in range(len(split_version_in_db)):
         try:
-            while (len(split_start[i]) < len(split_version_in_db[i])):
-                split_start[i] = "0" + split_start[i]
             if (split_start[i] < split_version_in_db[i]):
                 break
             elif (split_start[i] > split_version_in_db[i]):
-                print(split_start[i], split_version_in_db[i])
                 return False
         except:
-            continue
+            pass
 
     for i in range(len(split_version_in_db)):
         try:
-            while (len(split_end[i]) < len(split_version_in_db[i])):
-                split_end[i] = "0" + split_end[i]
             if (split_end[i] > split_version_in_db[i]):
                 break
             elif (split_end[i] < split_version_in_db[i]):
+                print(split_end[i], split_version_in_db[i])
                 return False
         except:
-            continue
+            pass
 
-    try:
-        if (split_start[len(split_version_in_db)] <= "0"):
-            return False
-    except:
-        pass
+    return True
 
-    try:
-        if (split_end[len(split_version_in_db)] >= "0"):
-            return False
-    except:
-        pass
+def test2(version_in_db: str, start: str = "any", end: str = "any") -> bool:
+    if version_in_db == "":
+        return False
+    if start == end == "any":
+        return True
+
+    # Split the versions into lists of numbers
+    versions = {
+        "version_in_db": list(map(int, re.findall(r"[0-9]+", version_in_db))),
+        "start": list(map(int, re.findall(r"[0-9]+", start))),
+        "end": list(map(int, re.findall(r"[0-9]+", end))),
+    }
+
+    # Pad the versions with zeros to ensure equal length
+    for version_type in versions:
+        if versions[version_type]:
+            versions[version_type] += [0] * (max(len(versions[version_type]), len(versions["version_in_db"])) - len(versions[version_type]))
+
+    # Check if the version in the database is within the specified range
+    for i in range(len(versions["version_in_db"])):
+        for version_type in versions:
+            try:
+                if versions[version_type][i] > versions["version_in_db"][i]:
+                    return False
+                elif versions[version_type][i] < versions["version_in_db"][i]:
+                    if version_type == "end":
+                        return False
+                    break
+            except IndexError:
+                pass
 
     return True
 

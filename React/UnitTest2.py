@@ -1,7 +1,7 @@
-import unitcompareVersions
+import unittest
 from server import compareVersions
 
-class compareVersionscompareVersions(unitcompareVersions.compareVersionsCase):
+class compareVersionscompareVersions(unittest.TestCase):
     def compareVersions_version_between_start_and_end(self):
         self.assertTrue(compareVersions('2.42.2+dfsg-1+deb11u1', '2.13.1-4.2', '6.2_p20200523-r0'))
         self.assertTrue(compareVersions('1.66.1-1+b1', '1.31.1-r21', '2.13.1-4.2'))
@@ -54,4 +54,4 @@ class compareVersionscompareVersions(unitcompareVersions.compareVersionsCase):
         self.assertFalse(compareVersions('1.66.1-1+b1', '1.66.1-1+b2', ''))
 
 if __name__ == '__main__':
-    unitcompareVersions.main()
+    unittest.main()
