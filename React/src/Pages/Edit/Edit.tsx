@@ -16,29 +16,18 @@ interface Version {
   ranges: [string, string][];
 }
 
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
-
 export function Edit() {
   const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
-  const [filterItems, setFilterItems] = useState<String[]>([
-    "a",
-    "basdsdgdfgdfgasddsdf",
-  ]);
+  const [filterItems, setFilterItems] = useState<String[]>([]);
   const [addItem, setAddItem] = useState<String>("");
   const [currentFilter, setFilter] = useState<String>("A");
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch(
-      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getBaseline"
-    )
+    fetch("http://localhost:5000/api/sbomTest/filters/getNames")
       .then((res) => res.json())
       .then((data) => {
-        setBaseLine(data[0]["baseLine"]);
+        setFilterItems(data);
       });
   }, []);
 
@@ -46,7 +35,7 @@ export function Edit() {
     <>
       <div className="screen">
         <Sidebar />
-        <div className="main">
+        <div className="mainEdit">
           <div className="FilterItems">
             <Select
               className="FilterSelect"
@@ -61,6 +50,22 @@ export function Edit() {
               className="AddIcon"
               onClick={() => {
                 if (filterItems.includes(addItem) === false && addItem !== "") {
+                  fetch(
+                    `http://localhost:5000/api/sbomTest/filters/postFilter`,
+                    {
+                      method: "POST",
+                      body: JSON.stringify({ name: addItem }),
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    }
+                  )
+                    .then((res) => res.json())
+                    .then((data) => {
+                      console.log(data);
+                    })
+                    .catch((err) => console.log(err));
+
                   setFilterItems([...filterItems, addItem]);
                 }
               }}
