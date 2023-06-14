@@ -7,9 +7,9 @@ import { DepSearch } from "./Pages/DepSearch/DepSearch";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<DepSearch />} />
       <Route path="/edit" element={<Edit />} />
-      <Route path="/dependencies" element={<DepSearch />} />
+      <Route path="/oldPage" element={<Home />} />
     </Routes>
   );
 }

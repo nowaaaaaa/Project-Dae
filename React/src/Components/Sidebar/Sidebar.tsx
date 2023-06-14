@@ -19,8 +19,6 @@ const Side: React.FC<{ item: SideItem[] }> = ({ item }) => {
         if (sideItem.Link === window.location.pathname) {
           classname += "-active";
         }
-        console.log(sideItem.name);
-        console.log(classname);
         return (
           <div
             className={classname}
@@ -50,11 +48,11 @@ export function Sidebar() {
           icon: <BorderColorIcon fontSize="large" />,
           Link: "/edit",
         },
-        {
-          name: "Search Dependencies",
-          icon: <ImageSearchIcon fontSize="large" />,
-          Link: "/dependencies",
-        },
+        // {
+        //   name: "Search Dependencies",
+        //   icon: <ImageSearchIcon fontSize="large" />,
+        //   Link: "/dependencies",
+        // },
       ]}
     />
   );

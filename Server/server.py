@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pymongo import MongoClient
 import versionCompare as vc
@@ -62,6 +62,71 @@ def get_dependencies(database, collection, depName, vStart, vEnd):
 
 
     return jsonify(foundDeps)
+
+@app.route('/api/sbomTest/filters/getNames')
+def get_names():
+    # Connect to the MongoDB server
+    client = MongoClient(uri)
+
+    db = client["sbomTest"]
+
+    collection = db["filters"]
+
+    names = []
+
+    for image in collection.find():
+        names.append(image.get("name"))
+
+    return jsonify(names)
+
+@app.route('/api/sbomTest/filters/postFilter', methods=['POST'])
+def post_filter():
+    # Connect to the MongoDB server
+    client = MongoClient(uri)
+
+    db = client["sbomTest"]
+
+    collection = db["filters"]
+
+    name = request.json.get("name")
+
+    collection.insert_one({
+        "name": name,
+        "filter": [
+
+        ]
+    })
+
+    return jsonify({"message": "Post Successful"})
+
+@app.route('/api/sbomTest/filters/getFilter/<name>')
+def get_filter(name):
+    # Connect to the MongoDB server
+    client = MongoClient(uri)
+
+    db = client["sbomTest"]
+
+    collection = db["filters"]
+
+    filter = collection.find_one({"name": name})
+
+    return jsonify(filter["filter"])
+
+@app.route('/api/sbomTest/filters/patchFilter', methods=['PATCH'])
+def patch_filter():
+    # Connect to the MongoDB server
+    client = MongoClient(uri)
+
+    db = client["sbomTest"]
+
+    collection = db["filters"]
+
+    name = request.json.get("name")
+    filter = request.json.get("filter")
+
+    collection.update_one({"name": name}, {"$set": {"filter": filter}})
+
+    return jsonify({"message": "Patch Successful"})
 
 if __name__ == '__main__':
     app.run()
