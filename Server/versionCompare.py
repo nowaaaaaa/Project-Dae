@@ -1,4 +1,6 @@
 import re
+import sys
+from itertools import zip_longest
 
 def compareVersions(version, start, end):
     less = False
@@ -71,3 +73,27 @@ def test(version_in_db: str, start: str = "", end: str = "") -> bool:
                 return False
         except IndexError:
             return True
+
+def test2(version: str, begin_range: str = "any", end_range: str = "any") -> bool:
+    if version == "":
+        return False
+    elif begin_range == end_range == "any":
+        return True
+
+    version_numbers = list(map(int, re.findall(r"[0-9]+", version)))
+    begin_range_numbers = list(map(int, re.findall(r"[0-9]+", begin_range))) if begin_range != "any" else [float("-inf")]
+    end_range_numbers = list(map(int, re.findall(r"[0-9]+", end_range))) if end_range != "any" else [float("inf")]
+
+    b = e = False
+    for v in zip_longest(version_numbers, begin_range_numbers, end_range_numbers, fillvalue=0):
+        if not b:
+            if v[0] < v[1]:
+                return False
+            elif v[0] > v[1]:
+                b = True
+        if not e:
+            if v[0] > v[2]:
+                return False
+            elif v[0] < v[2]:
+                e = True
+    return True
