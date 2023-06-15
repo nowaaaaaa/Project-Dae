@@ -49,7 +49,7 @@ export function DepSearch() {
       });
   }, []);
 
-  const handleClick = () => {
+  const handle_single_dependency = () => {
     const searchDepText = searchDep || "any";
     const searchStartVersionText = searchStartVersion || "any";
     const searchEndVersionText = searchEndVersion || "any";
@@ -61,6 +61,45 @@ export function DepSearch() {
       .then((data) => {
         setFile(data);
       });
+  };
+
+  const handle_filters = () => {
+    setFile([]);
+    baseLine.forEach((item: BaselineItem) => {
+      const { name, versions } = item;
+      const { versions: versionList, ranges } = versions;
+
+      versionList.forEach((version: string) => {
+        const searchDepText = name;
+        const searchStartVersionText = version || "any";
+        const searchEndVersionText = version || "any";
+
+        fetch(
+          `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setFile((prevFile) => [...prevFile, ...data]);
+          });
+      });
+
+      ranges.forEach((range: [string, string]) => {
+        const [startVersion, endVersion] = range;
+        const searchDepText = name;
+        const searchStartVersionText = startVersion || "any";
+        const searchEndVersionText = endVersion || "any";
+
+        fetch(
+          `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setFile((prevFile) => [...prevFile, ...data]);
+          });
+      });
+    });
+
+    // console.log(file);
   };
 
   const copy_to_clipboard = () => {
@@ -133,60 +172,55 @@ export function DepSearch() {
                   .then((res) => res.json())
                   .then((data) => {
                     setBaseLine(data);
-                    console.log(data);
+                    // console.log(data);
                   });
               }}
             />
             <Tooltip title="Enter dependency name">
               <TextField
                 label="Dependency Name"
-                onChange={(e) => {
-                  {
-                    setDep(e.target.value);
-                  }
-                }}
+                onChange={(e) => setDep(e.target.value)}
                 sx={{
-                  backgroundColor: "white",
+                  backgroundColor: currentFilter ? "#f0f0f0" : "white",
                   borderRadius: "5px",
                   marginRight: "10px",
                 }}
+                disabled={currentFilter !== ""}
               />
             </Tooltip>
             <Tooltip title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Start"'>
               <TextField
-                label="Version Range Start"
-                onChange={(e) => {
-                  {
-                    setStartVersion(e.target.value);
-                  }
-                }}
-                sx={{
-                  backgroundColor: "white",
-                  borderRadius: "5px",
-                  marginLeft: "10px",
-                }}
-              />
+              label="Version Range Start"
+              onChange={(e) => setStartVersion(e.target.value)}
+              sx={{
+                backgroundColor: currentFilter ? "#f0f0f0" : "white",
+                borderRadius: "5px",
+                marginLeft: "10px",
+              }}
+              disabled={currentFilter !== ""}
+            />
             </Tooltip>
             <Tooltip title='Leave "Version Range Start" empty for all versions smaller than or equal to "Version Range End"'>
               <TextField
                 label="Version Range End"
-                onChange={(e) => {
-                  {
-                    setEndVersion(e.target.value);
-                  }
-                }}
+                onChange={(e) => setEndVersion(e.target.value)}
                 sx={{
-                  backgroundColor: "white",
+                  backgroundColor: currentFilter ? "#f0f0f0" : "white",
                   borderRadius: "5px",
                   marginLeft: "10px",
                 }}
+                disabled={currentFilter !== ""}
               />
             </Tooltip>
             <button
               className="SrcBtn"
               onClick={() => {
+                if (!currentFilter) {
+                  handle_single_dependency();
+                }
+                else
                 {
-                  handleClick();
+                  handle_filters();
                 }
               }}
             >
