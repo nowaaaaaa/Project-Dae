@@ -49,6 +49,7 @@ export function DepSearch() {
   }, []);
 
   const setFileWithDependencies = (searchDepText: string, searchStartVersionText: string, searchEndVersionText: string) => {
+    setFile([]);
     fetch(
       `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
     )
