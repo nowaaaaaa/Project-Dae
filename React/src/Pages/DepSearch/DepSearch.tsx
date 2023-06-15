@@ -49,7 +49,6 @@ export function DepSearch() {
   }, []);
 
   const setFileWithDependencies = (searchDepText: string, searchStartVersionText: string, searchEndVersionText: string) => {
-    setFile([]);
     fetch(
       `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
     )
@@ -60,7 +59,6 @@ export function DepSearch() {
   };
 
   const setFileWithBaseline = () => {
-    setFile([]);
     baseLine.forEach((item: BaselineItem) => {
       const { name, versions } = item;
       const { versions: versionList, ranges } = versions;
@@ -113,10 +111,10 @@ export function DepSearch() {
     navigator.clipboard
       .writeText(formattedData)
       .then(() => {
-        console.log("File data copied to clipboard");
+        alert("Copied to clipboard");
       })
-      .catch((error) => {
-        console.error("Failed to copy file data to clipboard:", error);
+      .catch(() => {
+        alert("Failed to copy to clipboard:");
       });
   };
 
@@ -203,6 +201,7 @@ export function DepSearch() {
             <button
               className="SrcBtn"
               onClick={() => {
+                setFile([]);
                 if (!currentFilter) {
                   setFileWithDependencies(
                     searchDep || "any",
