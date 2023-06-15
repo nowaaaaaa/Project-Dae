@@ -149,5 +149,50 @@ def patch_filter():
 
     return jsonify({"message": "Patch Successful"})
 
+@app.route('/api/sbomTest/useFilter/<name>')
+def use_filter(name):
+    # Connect to the MongoDB server
+    client = MongoClient(uri)
+
+    db = client["sbomTest"]
+
+    filters_collection = db["filters"]
+    images_collection = db["deps"]
+
+    filter = filters_collection.find_one({"name": name})
+
+    filterArr = filter["filter"]
+
+    foundDeps = []
+
+    for image in filterArr[0]:
+        print(image["name"])
+        matches = images_collection.aggregate([
+            {
+                "$match": {
+                    "dependencies.name": image["name"]
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "name": 1,
+                    "dependencies": {
+                        "$filter": {
+                            "input": "$dependencies",
+                            "as": "dep",
+                            "cond": {"$eq": ["$$dep.name", image["name"]]}
+                        }
+                    }
+                }
+            }
+        ])
+        for match in matches:
+            foundDeps.append(match)
+
+    #Code om de dependencies te filteren op versie met specifieke versies in filter.versions.versions (=String[]) en ranges in filter.versions.ranges (=String[String, String][])
+
+    return jsonify(foundDeps)
+
 if __name__ == '__main__':
     app.run()
