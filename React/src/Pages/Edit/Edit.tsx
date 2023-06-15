@@ -44,6 +44,16 @@ export function Edit() {
                   return { value: item, label: item };
                 }
               })}
+              onChange={(e) => {
+                setFilter(e.value);
+                fetch(
+                  `http://localhost:5000/api/sbomTest/filters/getFilter/${e.value}`
+                )
+                  .then((res) => res.json())
+                  .then((data) => {
+                    setBaseLine(data);
+                  });
+              }}
             />
             <input type="text" onChange={(e) => setAddItem(e.target.value)} />
             <span
@@ -79,11 +89,18 @@ export function Edit() {
               className="SaveButton"
               onClick={() => {
                 setLoading(true); //Loading aanzetten
+                console.log(baseLine);
                 fetch(
-                  `https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/putBaseline`,
+                  `http://localhost:5000/api/sbomTest/filters/patchFilter`,
                   {
-                    method: "PUT",
-                    body: JSON.stringify({ baseLine }),
+                    method: "PATCH",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      name: currentFilter,
+                      versions: baseLine,
+                    }),
                   }
                 ).then(() => setLoading(false)); //Loading uitzetten als de fetch klaar is
               }}

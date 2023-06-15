@@ -93,7 +93,11 @@ def post_filter():
     collection.insert_one({
         "name": name,
         "filter": [
-
+            {
+                "name": "",
+                "versions": [],
+                "ranges": []
+            }
         ]
     })
 
@@ -121,10 +125,12 @@ def patch_filter():
 
     collection = db["filters"]
 
-    name = request.json.get("name")
-    filter = request.json.get("filter")
+    data = request.get_json()
+    print(data)
+    name = data.get("name")
+    filter = data.get("versions")
 
-    collection.update_one({"name": name}, {"$set": {"filter": filter}})
+    collection.update_one({"name[elem]": name}, {"$set": {"filter.$": filter}})
 
     return jsonify({"message": "Patch Successful"})
 
