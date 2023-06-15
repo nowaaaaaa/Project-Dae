@@ -87,6 +87,15 @@
     background-color: transparent;
   }
 
+  .ImageName {
+    margin: 0;
+    font-size: 300%;
+  }
+
+  .Version {
+    padding-left: 1em; /* Adjust the value as needed */
+  }
+
   .depText {
     margin: 0;
   }

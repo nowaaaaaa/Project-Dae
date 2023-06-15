@@ -177,16 +177,15 @@ export function DepSearch() {
               return (
                 <div className="img">
                   <p>
-                    <b>{image.name}:</b>
+                    <b className="ImageName">{image.name}:</b>
                   </p>
                   {image.dependencies.map((dep) => {
                     return (
                       <div className="DepInfo">
-                        {dep.name}
+                        <b>{dep.name}</b>
+                        <span className="Version">{dep.version}</span>
+                        <span className="Version">{dep.purl}</span>
                         <br />
-                        {dep.version}
-                        <br />
-                        {dep.purl}
                       </div>
                     );
                   })}
