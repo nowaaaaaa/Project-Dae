@@ -33,13 +33,12 @@ interface Version {
 
 export function DepSearch() {
   const [file, setFile] = useState<Image[]>([]);
-  // const [searchName, setSearchName] = useState("");
   const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
   const [searchDep, setDep] = useState("");
   const [searchStartVersion, setStartVersion] = useState("");
   const [searchEndVersion, setEndVersion] = useState("");
-  const [currentFilter, setCurrentFilter] = useState<String>("");
-  const [filterItems, setFilterItems] = useState<String[]>([]);
+  const [currentFilter, setCurrentFilter] = useState<string>("");
+  const [filterItems, setFilterItems] = useState<string[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/sbomTest/filters/getNames")
@@ -49,21 +48,17 @@ export function DepSearch() {
       });
   }, []);
 
-  const set_file_single = () => {
-    const searchDepText = searchDep || "any";
-    const searchStartVersionText = searchStartVersion || "any";
-    const searchEndVersionText = searchEndVersion || "any";
-
+  const setFileWithDependencies = (searchDepText: string, searchStartVersionText: string, searchEndVersionText: string) => {
     fetch(
       `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
     )
       .then((response) => response.json())
       .then((data) => {
-        setFile(data);
+        setFile((prevFile) => [...prevFile, ...data]);
       });
   };
 
-  const set_file_filters = () => {
+  const setFileWithBaseline = () => {
     setFile([]);
     baseLine.forEach((item: BaselineItem) => {
       const { name, versions } = item;
@@ -74,13 +69,7 @@ export function DepSearch() {
         const searchStartVersionText = version || "any";
         const searchEndVersionText = version || "any";
 
-        fetch(
-          `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setFile((prevFile) => [...prevFile, ...data]);
-          });
+        setFileWithDependencies(searchDepText, searchStartVersionText, searchEndVersionText);
       });
 
       ranges.forEach((range: [string, string]) => {
@@ -89,20 +78,12 @@ export function DepSearch() {
         const searchStartVersionText = startVersion || "any";
         const searchEndVersionText = endVersion || "any";
 
-        fetch(
-          `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setFile((prevFile) => [...prevFile, ...data]);
-          });
+        setFileWithDependencies(searchDepText, searchStartVersionText, searchEndVersionText);
       });
     });
-
-    // console.log(file);
   };
 
-  const copy_to_clipboard = () => {
+  const copyToClipboard = () => {
     const formattedData = file
       .filter((item) => item.dependencies.length > 0)
       .map((item) => {
@@ -128,14 +109,15 @@ export function DepSearch() {
       })
       .join("\n");
 
-    navigator.clipboard.writeText(formattedData)
-    .then(() => {
-      console.log('File data copied to clipboard');
-    })
-    .catch((error) => {
-      console.error('Failed to copy file data to clipboard:', error);
-    });
-  }
+    navigator.clipboard
+      .writeText(formattedData)
+      .then(() => {
+        console.log("File data copied to clipboard");
+      })
+      .catch((error) => {
+        console.error("Failed to copy file data to clipboard:", error);
+      });
+  };
 
   const clearFilter = () => {
     setCurrentFilter("");
@@ -154,7 +136,7 @@ export function DepSearch() {
 
   const selectOptions = filterItems.map((item) => ({
     value: item,
-    label: item
+    label: item,
   }));
 
   return (
@@ -169,7 +151,11 @@ export function DepSearch() {
             <Select
               className="FilterSelect"
               options={selectOptions}
-              value={currentFilter ? { value: currentFilter, label: currentFilter } : null}
+              value={
+                currentFilter
+                  ? { value: currentFilter, label: currentFilter }
+                  : null
+              }
               onChange={handleFilterChange}
               placeholder="Select a Filter"
             />
@@ -185,19 +171,23 @@ export function DepSearch() {
                 disabled={currentFilter !== ""}
               />
             </Tooltip>
-            <Tooltip title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Start"'>
+            <Tooltip
+              title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Start"'
+            >
               <TextField
-              label="Version Range Start"
-              onChange={(e) => setStartVersion(e.target.value)}
-              sx={{
-                backgroundColor: currentFilter ? "#f0f0f0" : "white",
-                borderRadius: "5px",
-                marginRight: "10px",
-              }}
-              disabled={currentFilter !== ""}
-            />
+                label="Version Range Start"
+                onChange={(e) => setStartVersion(e.target.value)}
+                sx={{
+                  backgroundColor: currentFilter ? "#f0f0f0" : "white",
+                  borderRadius: "5px",
+                  marginRight: "10px",
+                }}
+                disabled={currentFilter !== ""}
+              />
             </Tooltip>
-            <Tooltip title='Leave "Version Range Start" empty for all versions smaller than or equal to "Version Range End"'>
+            <Tooltip
+              title='Leave "Version Range Start" empty for all versions smaller than or equal to "Version Range End"'
+            >
               <TextField
                 label="Version Range End"
                 onChange={(e) => setEndVersion(e.target.value)}
@@ -213,34 +203,26 @@ export function DepSearch() {
               className="SrcBtn"
               onClick={() => {
                 if (!currentFilter) {
-                  set_file_single();
-                }
-                else
-                {
-                  set_file_filters();
+                  setFileWithDependencies(
+                    searchDep || "any",
+                    searchStartVersion || "any",
+                    searchEndVersion || "any"
+                  );
+                } else {
+                  setFileWithBaseline();
                 }
               }}
             >
               Search Images
             </button>
-            <button
-              className="SrcBtn"
-              onClick={() => {
-                {
-                  copy_to_clipboard();
-                }
-              }}
-            >
+            <button className="SrcBtn" onClick={copyToClipboard}>
               Copy to Clipboard
             </button>
           </div>
           <div className="Images">
-            {/* <h1 className="topText">
-              Images containing dependency "{searchDep}":
-            </h1> */}
             {file.map((image) => {
               if (image.dependencies.length === 0) {
-                return <></>;
+                return null;
               }
               return (
                 <div className="img">
