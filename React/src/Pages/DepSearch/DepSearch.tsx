@@ -10,6 +10,11 @@ interface Dependency {
   purl: string;
 }
 
+interface DependencyItem {
+  dependencies: Dependency[];
+  name: string;
+}
+
 interface Image {
   name: string;
   dependencies: Dependency[];
@@ -45,6 +50,49 @@ export function DepSearch() {
         setFile(data);
       });
   };
+
+  const copy_to_clipboard = () => {
+    const searchDepText = searchDep || "any";
+    const searchStartVersionText = searchStartVersion || "any";
+    const searchEndVersionText = searchEndVersion || "any";
+  
+    fetch(
+      `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data
+        .filter((item: DependencyItem) => item.dependencies.length > 0)
+        .map((item: DependencyItem) => {
+          const { name, dependencies } = item;
+
+          const longestName = Math.max(...dependencies.map((dep: Dependency) => dep.name.length));
+          const longestVersion = Math.max(...dependencies.map((dep: Dependency) => dep.version.length));
+
+          const packages = dependencies
+            .map(
+              (dep: Dependency) =>
+                `${dep.name.padEnd(longestName + 4)}${dep.version.padEnd(longestVersion + 4)}${dep.purl}`
+            )
+            .join(',\n\t');
+
+          return `name: ${name}\n\t${packages}\n`;
+        })
+        .join('\n\n');
+  
+        // Create a temporary textarea element
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = formattedData;
+        document.body.appendChild(tempTextArea);
+  
+        // Select the text and copy it to the clipboard
+        tempTextArea.select();
+        document.execCommand('copy');
+  
+        // Clean up the temporary textarea
+        document.body.removeChild(tempTextArea);
+      });
+  };  
 
   return (
     <>
@@ -106,6 +154,16 @@ export function DepSearch() {
               }}
             >
               Search Images
+            </button>
+            <button
+              className="CopyBtn"
+              onClick={() => {
+                {
+                  copy_to_clipboard();
+                }
+              }}
+            >
+              Copy to clipboard
             </button>
           </div>
           <div className="Images">

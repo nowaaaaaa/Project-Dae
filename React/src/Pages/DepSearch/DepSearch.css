@@ -45,6 +45,13 @@
     color: black;
   }
 
+  .CopyBtn {
+    margin-left: 1rem;
+    background-color: grey;
+    border: 2px solid black;
+    color: rgb(255, 255, 255);
+  }
+
   .Images {
     margin-top: 2rem;
     width: 100%;
