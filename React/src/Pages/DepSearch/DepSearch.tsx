@@ -3,6 +3,7 @@ import { Sidebar } from "../../Components/Sidebar/Sidebar";
 import "./DepSearch.css";
 import TextField from "@mui/material/TextField";
 import { Tooltip } from "@mui/material";
+import Select from "react-select";
 
 interface Dependency {
   name: string;
@@ -33,9 +34,20 @@ interface Version {
 export function DepSearch() {
   const [file, setFile] = useState<Image[]>([]);
   // const [searchName, setSearchName] = useState("");
+  const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
   const [searchDep, setDep] = useState("");
   const [searchStartVersion, setStartVersion] = useState("");
   const [searchEndVersion, setEndVersion] = useState("");
+  const [currentFilter, setFilter] = useState<String>("");
+  const [filterItems, setFilterItems] = useState<String[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/sbomTest/filters/getNames")
+      .then((res) => res.json())
+      .then((data) => {
+        setFilterItems(data);
+      });
+  }, []);
 
   const handleClick = () => {
     const searchDepText = searchDep || "any";
@@ -55,44 +67,50 @@ export function DepSearch() {
     const searchDepText = searchDep || "any";
     const searchStartVersionText = searchStartVersion || "any";
     const searchEndVersionText = searchEndVersion || "any";
-  
+
     fetch(
       `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
     )
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data
-        .filter((item: DependencyItem) => item.dependencies.length > 0)
-        .map((item: DependencyItem) => {
-          const { name, dependencies } = item;
+          .filter((item: DependencyItem) => item.dependencies.length > 0)
+          .map((item: DependencyItem) => {
+            const { name, dependencies } = item;
 
-          const longestName = Math.max(...dependencies.map((dep: Dependency) => dep.name.length));
-          const longestVersion = Math.max(...dependencies.map((dep: Dependency) => dep.version.length));
+            const longestName = Math.max(
+              ...dependencies.map((dep: Dependency) => dep.name.length)
+            );
+            const longestVersion = Math.max(
+              ...dependencies.map((dep: Dependency) => dep.version.length)
+            );
 
-          const packages = dependencies
-            .map(
-              (dep: Dependency) =>
-                `${dep.name.padEnd(longestName + 4)}${dep.version.padEnd(longestVersion + 4)}${dep.purl}`
-            )
-            .join(',\n\t');
+            const packages = dependencies
+              .map(
+                (dep: Dependency) =>
+                  `${dep.name.padEnd(longestName + 4)}${dep.version.padEnd(
+                    longestVersion + 4
+                  )}${dep.purl}`
+              )
+              .join(",\n\t");
 
-          return `name: ${name}\n\t${packages}\n`;
-        })
-        .join('\n\n');
-  
+            return `name: ${name}\n\t${packages}\n`;
+          })
+          .join("\n\n");
+
         // Create a temporary textarea element
-        const tempTextArea = document.createElement('textarea');
+        const tempTextArea = document.createElement("textarea");
         tempTextArea.value = formattedData;
         document.body.appendChild(tempTextArea);
-  
+
         // Select the text and copy it to the clipboard
         tempTextArea.select();
-        document.execCommand('copy');
-  
+        document.execCommand("copy");
+
         // Clean up the temporary textarea
         document.body.removeChild(tempTextArea);
       });
-  };  
+  };
 
   return (
     <>
@@ -100,6 +118,25 @@ export function DepSearch() {
         <Sidebar />
         <div className="main">
           <div className="textFields">
+            <Select
+              className="FilterSelect"
+              options={filterItems.map((item) => {
+                {
+                  return { value: item, label: item };
+                }
+              })}
+              onChange={(e) => {
+                setFilter(e.value);
+                fetch(
+                  `http://localhost:5000/api/sbomTest/filters/getFilter/${e.value}`
+                )
+                  .then((res) => res.json())
+                  .then((data) => {
+                    setBaseLine(data);
+                    console.log(data);
+                  });
+              }}
+            />
             <Tooltip title="Enter dependency name">
               <TextField
                 label="Dependency Name"

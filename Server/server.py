@@ -92,13 +92,7 @@ def post_filter():
 
     collection.insert_one({
         "name": name,
-        "filter": [
-            {
-                "name": "",
-                "versions": [],
-                "ranges": []
-            }
-        ]
+        "filter": []
     })
 
     return jsonify({"message": "Post Successful"})
@@ -114,9 +108,19 @@ def get_filter(name):
 
     filter = collection.find_one({"name": name})
 
-    return jsonify(filter["filter"])
+    values = []
 
-@app.route('/api/sbomTest/filters/patchFilter', methods=['PATCH'])
+    for val in filter["filter"]:
+        values.append(val)
+
+    # val = {
+    #     "name": filter["filter"]["name"],
+    #     "versions": filter["filter"]["versions"],
+    # }
+
+    return jsonify(values[0])
+
+@app.route('/api/sbomTest/filters/patchFilter', methods=['POST'])
 def patch_filter():
     # Connect to the MongoDB server
     client = MongoClient(uri)
@@ -126,11 +130,22 @@ def patch_filter():
     collection = db["filters"]
 
     data = request.get_json()
-    print(data)
+
     name = data.get("name")
     filter = data.get("versions")
 
-    collection.update_one({"name[elem]": name}, {"$set": {"filter.$": filter}})
+    collection.update_one(
+        {
+            "name": name
+        },
+        {
+            "$set": {
+                "filter": [
+                    filter
+                ]
+            }
+        }
+    )
 
     return jsonify({"message": "Patch Successful"})
 

@@ -20,7 +20,7 @@ export function Edit() {
   const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
   const [filterItems, setFilterItems] = useState<String[]>([]);
   const [addItem, setAddItem] = useState<String>("");
-  const [currentFilter, setFilter] = useState<String>("A");
+  const [currentFilter, setFilter] = useState<String>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -52,6 +52,7 @@ export function Edit() {
                   .then((res) => res.json())
                   .then((data) => {
                     setBaseLine(data);
+                    console.log(data);
                   });
               }}
             />
@@ -93,7 +94,7 @@ export function Edit() {
                 fetch(
                   `http://localhost:5000/api/sbomTest/filters/patchFilter`,
                   {
-                    method: "PATCH",
+                    method: "POST",
                     headers: {
                       "Content-Type": "application/json",
                     },
