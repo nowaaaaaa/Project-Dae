@@ -188,11 +188,34 @@ def use_filter(name):
             }
         ])
         for match in matches:
-            foundDeps.append(match)
+            for dep in foundDeps:
+                if (dep["name"] == match["name"]):
+                    dep["dependencies"].append(match["dependencies"][0])
+                    break
+            else:
+                foundDeps.append(match)
 
+    print(filterArr[0])
+    returnVal = []
+
+    for image in foundDeps:
+        for dep in image["dependencies"]:
+            for filter in filterArr[0]:
+                if (filter["name"] == dep["name"]):
+                    if (dep["version"] in filter["versions"]["versions"]):
+                        returnVal.append(image)
+                        break
+                    else:
+                        for range in filter["versions"]["ranges"]:
+                            if (vc.compareVersions(dep["version"], range[0], range[1])):
+                                returnVal.append(image)
+                                break
+            
+
+        
     #Code om de dependencies te filteren op versie met specifieke versies in filter.versions.versions (=String[]) en ranges in filter.versions.ranges (=String[String, String][])
 
-    return jsonify(foundDeps)
+    return jsonify(returnVal)
 
 if __name__ == '__main__':
     app.run()
