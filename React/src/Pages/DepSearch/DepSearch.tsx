@@ -103,52 +103,152 @@ export function DepSearch() {
   };
 
   const copy_to_clipboard = () => {
-    const searchDepText = searchDep || "any";
-    const searchStartVersionText = searchStartVersion || "any";
-    const searchEndVersionText = searchEndVersion || "any";
+    const tempTextArea = document.createElement("textarea");
+    if (currentFilter === "") {
+      const searchDepText = searchDep || "any";
+      const searchStartVersionText = searchStartVersion || "any";
+      const searchEndVersionText = searchEndVersion || "any";
 
-    fetch(
-      `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const formattedData = data
-          .filter((item: DependencyItem) => item.dependencies.length > 0)
-          .map((item: DependencyItem) => {
-            const { name, dependencies } = item;
+      fetch(
+        `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const formattedData = data
+            .filter((item: DependencyItem) => item.dependencies.length > 0)
+            .map((item: DependencyItem) => {
+              const { name, dependencies } = item;
 
-            const longestName = Math.max(
-              ...dependencies.map((dep: Dependency) => dep.name.length)
-            );
-            const longestVersion = Math.max(
-              ...dependencies.map((dep: Dependency) => dep.version.length)
-            );
+              const longestName = Math.max(
+                ...dependencies.map((dep: Dependency) => dep.name.length)
+              );
+              const longestVersion = Math.max(
+                ...dependencies.map((dep: Dependency) => dep.version.length)
+              );
 
-            const packages = dependencies
-              .map(
-                (dep: Dependency) =>
-                  `${dep.name.padEnd(longestName + 4)}${dep.version.padEnd(
-                    longestVersion + 4
-                  )}${dep.purl}`
-              )
-              .join(",\n\t");
+              const packages = dependencies
+                .map(
+                  (dep: Dependency) =>
+                    `${dep.name.padEnd(longestName + 4)}${dep.version.padEnd(
+                      longestVersion + 4
+                    )}${dep.purl}`
+                )
+                .join(",\n\t");
 
-            return `name: ${name}\n\t${packages}\n`;
-          })
-          .join("\n\n");
+              return `name: ${name}\n\t${packages}\n`;
+            })
+            .join("\n\n");
 
-        // Create a temporary textarea element
-        const tempTextArea = document.createElement("textarea");
-        tempTextArea.value = formattedData;
-        document.body.appendChild(tempTextArea);
+          tempTextArea.value += formattedData;
+          document.body.appendChild(tempTextArea);
 
-        // Select the text and copy it to the clipboard
-        tempTextArea.select();
-        document.execCommand("copy");
+          // Select the text and copy it to the clipboard
+          tempTextArea.select();
+          document.execCommand("copy");
 
-        // Clean up the temporary textarea
-        document.body.removeChild(tempTextArea);
+          // Clean up the temporary textarea
+          document.body.removeChild(tempTextArea);
+        });
+    } else {
+      baseLine.forEach((item: BaselineItem) => {
+        const { name, versions } = item;
+        const { versions: versionList, ranges } = versions;
+
+        versionList.forEach((version: string) => {
+          const searchDepText = name;
+          const searchStartVersionText = version || "any";
+          const searchEndVersionText = version || "any";
+
+          fetch(
+            `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              const formattedData = data
+                .filter((item: DependencyItem) => item.dependencies.length > 0)
+                .map((item: DependencyItem) => {
+                  const { name, dependencies } = item;
+                  
+                  const longestName = Math.max(
+                    ...dependencies.map((dep: Dependency) => dep.name.length)
+                  );
+                  const longestVersion = Math.max(
+                    ...dependencies.map((dep: Dependency) => dep.version.length)
+                  );
+
+                  const packages = dependencies
+                    .map(
+                      (dep: Dependency) =>
+                        `${dep.name.padEnd(longestName + 4)}${dep.version.padEnd(
+                          longestVersion + 4
+                        )}${dep.purl}`
+                    )
+                    .join(",\n\t");
+
+                  return `name: ${name}\n\t${packages}\n`;
+                })
+                .join("\n\n");
+
+              tempTextArea.value += formattedData;
+              document.body.appendChild(tempTextArea);
+
+              tempTextArea.select();
+              // document.execCommand("copy");
+
+              // // Clean up the temporary textarea
+              // document.body.removeChild(tempTextArea);
+            });
+        });
+
+        ranges.forEach((range: [string, string]) => {
+          const [startVersion, endVersion] = range;
+          const searchDepText = name;
+          const searchStartVersionText = startVersion || "any";
+          const searchEndVersionText = endVersion || "any";
+
+          fetch(
+            `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              const formattedData = data
+                .filter((item: DependencyItem) => item.dependencies.length > 0)
+                .map((item: DependencyItem) => {
+                  const { name, dependencies } = item;
+
+                  const longestName = Math.max(
+                    ...dependencies.map((dep: Dependency) => dep.name.length)
+                  );
+                  const longestVersion = Math.max(
+                    ...dependencies.map((dep: Dependency) => dep.version.length)
+                  );
+
+                  const packages = dependencies
+                    .map(
+                      (dep: Dependency) =>
+                        `${dep.name.padEnd(longestName + 4)}${dep.version.padEnd(
+                          longestVersion + 4
+                        )}${dep.purl}`
+                    )
+                    .join(",\n\t");
+
+                  return `name: ${name}\n\t${packages}\n`;
+                })
+                .join("\n\n");
+
+              tempTextArea.value += formattedData;
+              document.body.appendChild(tempTextArea);
+
+              tempTextArea.select();
+            });
+        });
+
       });
+      document.execCommand("copy");
+
+      // Clean up the temporary textarea
+      document.body.removeChild(tempTextArea);
+    }
   };
 
   const clearFilter = () => {
