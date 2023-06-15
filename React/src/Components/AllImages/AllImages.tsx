@@ -49,7 +49,7 @@ const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
     <div>
       <div className="DepHolder">
         <p className="">{dep.name}</p>
-        <p className="version">{dep.version}</p>
+        <p className="">{dep.version}</p>
       </div>
       <div style={{marginLeft:5}}>{dep.purl}</div>
     </div>
