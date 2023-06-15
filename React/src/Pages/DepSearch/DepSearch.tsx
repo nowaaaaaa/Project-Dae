@@ -222,7 +222,6 @@ export function DepSearch() {
                         <b>{dep.name}</b>
                         <span className="Version">{dep.version}</span>
                         <span className="Version">{dep.purl}</span>
-                        <br />
                       </div>
                     );
                   })}
