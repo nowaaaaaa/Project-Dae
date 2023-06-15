@@ -28,28 +28,23 @@
     position: absolute;
     display: flex;
     background-color: transparent;
-    margin-left: 25%;
+    margin-left: 5%;
     padding-top: 5px;
     margin-top: 5px;
     top: 0;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     z-index: 2;
   }
 
   .SrcBtn {
-    margin-left: 1rem;
+    /* margin-left: 1rem; */
     background-color: rgb(255, 255, 255);
     border: black 2px solid;
     color: black;
-  }
-
-  .CopyBtn {
-    margin-left: 1rem;
-    background-color: grey;
-    border: 2px solid black;
-    color: rgb(255, 255, 255);
+    border-radius: 5px;
+    margin-right: 10px;
   }
 
   .Images {
@@ -63,7 +58,7 @@
     align-items: center;
   }
 
-  .img:nth-child(even) {
+  .img:nth-child(odd) {
     background-color: rgba(230, 215, 215, 0.247);
   }
 

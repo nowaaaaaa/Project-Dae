@@ -23,20 +23,6 @@
   justify-content: left;
 }
 
-.textFields {
-  position: absolute;
-  display: flex;
-  background-color: transparent;
-  margin-left: 30%;
-  padding-top: 5px;
-  margin-top: 5px;
-  top: 0;
-  justify-content: center;
-  align-items: center;
-  overflow-x: hidden;
-  z-index: 2;
-}
-
 .Spacer {
   height: 3.5rem;
 }

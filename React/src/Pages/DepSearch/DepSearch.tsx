@@ -38,7 +38,7 @@ export function DepSearch() {
   const [searchDep, setDep] = useState("");
   const [searchStartVersion, setStartVersion] = useState("");
   const [searchEndVersion, setEndVersion] = useState("");
-  const [currentFilter, setFilter] = useState<String>("");
+  const [currentFilter, setCurrentFilter] = useState<String>("");
   const [filterItems, setFilterItems] = useState<String[]>([]);
 
   useEffect(() => {
@@ -151,30 +151,41 @@ export function DepSearch() {
       });
   };
 
+  const clearFilter = () => {
+    setCurrentFilter("");
+  };
+
+  const handleFilterChange = (selectedOption: { value: string; label: string }) => {
+    setCurrentFilter(selectedOption.value);
+    fetch(
+      `http://localhost:5000/api/sbomTest/filters/getFilter/${selectedOption.value}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setBaseLine(data);
+      });
+  };
+
+  const selectOptions = filterItems.map((item) => ({
+    value: item,
+    label: item
+  }));
+
   return (
     <>
       <div className="screen">
         <Sidebar />
         <div className="main">
           <div className="textFields">
+            <button className="SrcBtn" onClick={clearFilter}>
+              Clear Filter
+            </button>
             <Select
               className="FilterSelect"
-              options={filterItems.map((item) => {
-                {
-                  return { value: item, label: item };
-                }
-              })}
-              onChange={(e) => {
-                setFilter(e.value);
-                fetch(
-                  `http://localhost:5000/api/sbomTest/filters/getFilter/${e.value}`
-                )
-                  .then((res) => res.json())
-                  .then((data) => {
-                    setBaseLine(data);
-                    // console.log(data);
-                  });
-              }}
+              options={selectOptions}
+              value={currentFilter ? { value: currentFilter, label: currentFilter } : null}
+              onChange={handleFilterChange}
+              placeholder="Select a Filter"
             />
             <Tooltip title="Enter dependency name">
               <TextField
@@ -195,7 +206,7 @@ export function DepSearch() {
               sx={{
                 backgroundColor: currentFilter ? "#f0f0f0" : "white",
                 borderRadius: "5px",
-                marginLeft: "10px",
+                marginRight: "10px",
               }}
               disabled={currentFilter !== ""}
             />
@@ -207,7 +218,7 @@ export function DepSearch() {
                 sx={{
                   backgroundColor: currentFilter ? "#f0f0f0" : "white",
                   borderRadius: "5px",
-                  marginLeft: "10px",
+                  marginRight: "10px",
                 }}
                 disabled={currentFilter !== ""}
               />
@@ -227,20 +238,20 @@ export function DepSearch() {
               Search Images
             </button>
             <button
-              className="CopyBtn"
+              className="SrcBtn"
               onClick={() => {
                 {
                   copy_to_clipboard();
                 }
               }}
             >
-              Copy to clipboard
+              Copy to Clipboard
             </button>
           </div>
           <div className="Images">
-            <h1 className="topText">
+            {/* <h1 className="topText">
               Images containing dependency "{searchDep}":
-            </h1>
+            </h1> */}
             {file.map((image) => {
               if (image.dependencies.length === 0) {
                 return <></>;
