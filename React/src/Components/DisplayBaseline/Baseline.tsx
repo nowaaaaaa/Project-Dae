@@ -122,7 +122,7 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeRangeStart(itemIndex, rangeIndex, event)
                     }
-                    placeholder="Enter Begin Range"
+                    placeholder="Enter Begin"
                   />
                   <input
                     className="RangeEnd"
@@ -131,7 +131,7 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeRangeEnd(itemIndex, rangeIndex, event)
                     }
-                    placeholder="Enter End Range"
+                    placeholder="Enter End"
                   />
                 </li>
               ))}
