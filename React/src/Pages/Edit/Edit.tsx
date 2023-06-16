@@ -56,7 +56,11 @@ export function Edit() {
                   });
               }}
             />
-            <input type="text" placeholder="Enter New Filter Name" onChange={(e) => setAddItem(e.target.value)} />
+            <input
+              type="text"
+              placeholder="Enter New Filter Name"
+              onChange={(e) => setAddItem(e.target.value)}
+            />
             <span
               className="AddIcon"
               onClick={() => {
@@ -84,37 +88,41 @@ export function Edit() {
               <AddIcon />
             </span>
           </div>
-          <Baseline baseline={baseLine} setBaseline={setBaseLine} />
-          <div className="ButtonHolder">
-            <button
-              className="SaveButton"
-              onClick={() => {
-                setLoading(true); //Loading aanzetten
-                console.log(baseLine);
-                fetch(
-                  `http://localhost:5000/api/sbomTest/filters/patchFilter`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      name: currentFilter,
-                      versions: baseLine,
-                    }),
-                  }
-                ).then(() => setLoading(false)); //Loading uitzetten als de fetch klaar is
-              }}
-            >
-              Save
-            </button>
-            {loading && (
-              <div className="loader">
-                <CircularProgress size={"1rem"} />
-                {/*Loading icoontje als Loading aan staat, nog niet super goede plek maar dat komt wel*/}
+          {currentFilter !== "" && (
+            <>
+              <Baseline baseline={baseLine} setBaseline={setBaseLine} />
+              <div className="ButtonHolder">
+                <button
+                  className="SaveButton"
+                  onClick={() => {
+                    setLoading(true); //Loading aanzetten
+                    console.log(baseLine);
+                    fetch(
+                      `http://localhost:5000/api/sbomTest/filters/patchFilter`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          name: currentFilter,
+                          versions: baseLine,
+                        }),
+                      }
+                    ).then(() => setLoading(false)); //Loading uitzetten als de fetch klaar is
+                  }}
+                >
+                  Save
+                  {loading && (
+                    <div className="loader">
+                      <CircularProgress size={"1rem"} />
+                      {/*Loading icoontje als Loading aan staat, nog niet super goede plek maar dat komt wel*/}
+                    </div>
+                  )}
+                </button>
               </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
       </div>
     </>

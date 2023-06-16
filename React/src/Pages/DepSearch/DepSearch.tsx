@@ -4,6 +4,8 @@ import "./DepSearch.css";
 import TextField from "@mui/material/TextField";
 import { Tooltip } from "@mui/material";
 import Select from "react-select";
+import Swal from "sweetalert2";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface Dependency {
   name: string;
@@ -39,6 +41,7 @@ export function DepSearch() {
   const [searchEndVersion, setEndVersion] = useState("");
   const [currentFilter, setCurrentFilter] = useState<string>("");
   const [filterItems, setFilterItems] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/sbomTest/filters/getNames")
@@ -53,20 +56,28 @@ export function DepSearch() {
     searchStartVersionText: string,
     searchEndVersionText: string
   ) => {
+    setLoading(true);
     fetch(
       `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
     )
       .then((response) => response.json())
       .then((data) => {
         setFile((prevFile) => [...prevFile, ...data]);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   const setFileWithBaseline = () => {
+    setLoading(true);
     fetch(`http://localhost:5000/api/sbomTest/useFilter/${currentFilter}`)
       .then((response) => response.json())
       .then((data) => {
         setFile((prevFile) => [...prevFile, ...data]);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -99,10 +110,30 @@ export function DepSearch() {
     navigator.clipboard
       .writeText(formattedData)
       .then(() => {
-        alert("Copied to clipboard");
+        Swal.fire({
+          icon: "success",
+          title: "Copied to clipboard!",
+          showConfirmButton: false,
+          timer: 1000,
+          backdrop: false,
+          position: "bottom-end",
+          toast: true,
+          color: "black",
+          background: "#f0f0f0",
+        });
       })
       .catch(() => {
-        alert("Failed to copy to clipboard:");
+        Swal.fire({
+          icon: "error",
+          title: "Copying failed!",
+          showConfirmButton: false,
+          timer: 1000,
+          backdrop: false,
+          position: "bottom-end",
+          toast: true,
+          color: "black",
+          background: "#f0f0f0",
+        });
       });
   };
 
@@ -207,6 +238,11 @@ export function DepSearch() {
             </button>
           </div>
           <div className="Images">
+            {loading && (
+              <div className="Loading">
+                <CircularProgress />
+              </div>
+            )}
             {file.map((image) => {
               if (image.dependencies.length === 0) {
                 return null;
