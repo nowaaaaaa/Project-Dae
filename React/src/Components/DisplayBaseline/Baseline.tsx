@@ -1,5 +1,8 @@
 import React from "react";
 import "./Baseline.css";
+import AddIcon from "@mui/icons-material/Add";
+import Tooltip from "@mui/material/Tooltip";
+import ClearIcon from "@mui/icons-material/Clear";
 
 interface BaselineItem {
   name: string;
@@ -63,9 +66,21 @@ export const Baseline: React.FC<{
     setBaseline(updatedBaseline);
   };
 
+  const handleRemoveVersion = (itemIndex: number, versionIndex: number) => {
+    const updatedBaseline = [...baseline];
+    updatedBaseline[itemIndex].versions.versions.splice(versionIndex, 1);
+    setBaseline(updatedBaseline);
+  };
+
   const handleAddRange = (itemIndex: number) => {
     const updatedBaseline = [...baseline];
     updatedBaseline[itemIndex].versions.ranges.push(["", ""]);
+    setBaseline(updatedBaseline);
+  };
+
+  const handleRemoveRange = (itemIndex: number, rangeIndex: number) => {
+    const updatedBaseline = [...baseline];
+    updatedBaseline[itemIndex].versions.ranges.splice(rangeIndex, 1);
     setBaseline(updatedBaseline);
   };
 
@@ -92,7 +107,7 @@ export const Baseline: React.FC<{
           <div className="VersionsHolder">
             <ul className="Versions">
               {item.versions.versions.map((version, versionIndex) => (
-                <li key={versionIndex}>
+                <li key={versionIndex} className="versionsList">
                   <input
                     type="text"
                     value={version}
@@ -101,6 +116,14 @@ export const Baseline: React.FC<{
                     }
                     placeholder="Enter Specific Version"
                   />
+                  <span
+                    className="ClearHolder"
+                    onClick={() => {
+                      handleRemoveVersion(itemIndex, versionIndex);
+                    }}
+                  >
+                    <ClearIcon className="Clear" />
+                  </span>
                 </li>
               ))}
             </ul>
@@ -122,7 +145,7 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeRangeStart(itemIndex, rangeIndex, event)
                     }
-                    placeholder="Enter Begin"
+                    placeholder="Begin Range"
                   />
                   <input
                     className="RangeEnd"
@@ -131,8 +154,16 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeRangeEnd(itemIndex, rangeIndex, event)
                     }
-                    placeholder="Enter End"
+                    placeholder="End Range"
                   />
+                  <span
+                    className="ClearHolder"
+                    onClick={() => {
+                      handleRemoveRange(itemIndex, rangeIndex);
+                    }}
+                  >
+                    <ClearIcon className="Clear" />
+                  </span>
                 </li>
               ))}
             </ul>
@@ -145,9 +176,11 @@ export const Baseline: React.FC<{
           </div>
         </div>
       ))}
-      <button onClick={handleAddBaselineItem} className="AddBsln">
-        Add Extra Dependency
-      </button>
+      <Tooltip title="Add Dependency" color="red">
+        <button onClick={handleAddBaselineItem} className="AddBsln">
+          <AddIcon fontSize="large" />
+        </button>
+      </Tooltip>
     </div>
   );
 };
