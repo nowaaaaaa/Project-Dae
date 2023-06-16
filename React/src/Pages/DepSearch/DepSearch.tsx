@@ -44,6 +44,46 @@ export function DepSearch() {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    let isFetching = false;
+    let promise = null;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter" && !isFetching) {
+        isFetching = true;
+        setFile([]);
+        if (!currentFilter) {
+          promise = setFileWithDependencies(
+            searchDep || "any",
+            searchStartVersion || "any",
+            searchEndVersion || "any"
+          );
+        } else {
+          promise = setFileWithBaseline();
+        }
+        promise
+          .then(() => {
+            isFetching = false;
+          })
+          .catch(() => {
+            isFetching = false;
+          });
+      }
+      if (e.key === "Backspace") {
+        clearFilter();
+      }
+      if (e.key === "c" && e.ctrlKey) {
+        copyToClipboard();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentFilter, searchDep, searchStartVersion, searchEndVersion]);
+
+  useEffect(() => {
     fetch("http://localhost:5000/api/sbomTest/filters/getNames")
       .then((res) => res.json())
       .then((data) => {
