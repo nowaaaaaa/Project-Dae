@@ -3,6 +3,7 @@ import "./Baseline.css";
 import AddIcon from "@mui/icons-material/Add";
 import Tooltip from "@mui/material/Tooltip";
 import ClearIcon from "@mui/icons-material/Clear";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface BaselineItem {
   name: string;
@@ -87,21 +88,37 @@ export const Baseline: React.FC<{
   const handleAddBaselineItem = () => {
     setBaseline((prevState) => [
       ...prevState,
-      { name: "", versions: { versions: [""], ranges: [["", ""]] } },
+      { name: "", versions: { versions: [], ranges: [] } },
     ]);
+  };
+
+  const handleRemoveBaselineItem = (itemIndex: number) => {
+    const updatedBaseline = [...baseline];
+    updatedBaseline.splice(itemIndex, 1);
+    setBaseline(updatedBaseline);
   };
 
   return (
     <div className="BaselineMap">
       {baseline.map((item, itemIndex) => (
         <div key={itemIndex} className="BaselineItem">
+          <Tooltip title="Remove Dependency" arrow placement="right">
+            <span
+              className="DeleteBaselineItem"
+              onClick={() => {
+                handleRemoveBaselineItem(itemIndex);
+              }}
+            >
+              <DeleteIcon className="Clear" />
+            </span>
+          </Tooltip>
           <div className="NameHolder">
             <input
               className="NameInput"
               type="text"
               value={item.name}
               onChange={(event) => handleChangeName(itemIndex, event)}
-              placeholder="Enter Dependency Name"
+              placeholder="Dependency Name"
             />
           </div>
           <div className="VersionsHolder">
@@ -116,14 +133,16 @@ export const Baseline: React.FC<{
                     }
                     placeholder="Enter Specific Version"
                   />
-                  <span
-                    className="ClearHolder"
-                    onClick={() => {
-                      handleRemoveVersion(itemIndex, versionIndex);
-                    }}
-                  >
-                    <ClearIcon className="Clear" />
-                  </span>
+                  <Tooltip title="Remove Version" arrow placement="right">
+                    <span
+                      className="ClearHolder"
+                      onClick={() => {
+                        handleRemoveVersion(itemIndex, versionIndex);
+                      }}
+                    >
+                      <ClearIcon className="Clear" />
+                    </span>
+                  </Tooltip>
                 </li>
               ))}
             </ul>
@@ -145,7 +164,7 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeRangeStart(itemIndex, rangeIndex, event)
                     }
-                    placeholder="Begin Range"
+                    placeholder="Range Start"
                   />
                   <input
                     className="RangeEnd"
@@ -154,16 +173,18 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeRangeEnd(itemIndex, rangeIndex, event)
                     }
-                    placeholder="End Range"
+                    placeholder="Range End"
                   />
-                  <span
-                    className="ClearHolder"
-                    onClick={() => {
-                      handleRemoveRange(itemIndex, rangeIndex);
-                    }}
-                  >
-                    <ClearIcon className="Clear" />
-                  </span>
+                  <Tooltip title="Remove Version Range" arrow placement="right">
+                    <span
+                      className="ClearHolder"
+                      onClick={() => {
+                        handleRemoveRange(itemIndex, rangeIndex);
+                      }}
+                    >
+                      <ClearIcon className="Clear" />
+                    </span>
+                  </Tooltip>
                 </li>
               ))}
             </ul>

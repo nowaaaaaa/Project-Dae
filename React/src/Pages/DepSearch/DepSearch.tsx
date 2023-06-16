@@ -48,7 +48,11 @@ export function DepSearch() {
       });
   }, []);
 
-  const setFileWithDependencies = (searchDepText: string, searchStartVersionText: string, searchEndVersionText: string) => {
+  const setFileWithDependencies = (
+    searchDepText: string,
+    searchStartVersionText: string,
+    searchEndVersionText: string
+  ) => {
     fetch(
       `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
     )
@@ -59,9 +63,7 @@ export function DepSearch() {
   };
 
   const setFileWithBaseline = () => {
-    fetch(
-      `http://localhost:5000/api/sbomTest/useFilter/${currentFilter}`
-    )
+    fetch(`http://localhost:5000/api/sbomTest/useFilter/${currentFilter}`)
       .then((response) => response.json())
       .then((data) => {
         setFile((prevFile) => [...prevFile, ...data]);
@@ -108,7 +110,10 @@ export function DepSearch() {
     setCurrentFilter("");
   };
 
-  const handleFilterChange = (selectedOption: { value: string; label: string }) => {
+  const handleFilterChange = (selectedOption: {
+    value: string;
+    label: string;
+  }) => {
     setCurrentFilter(selectedOption.value);
     fetch(
       `http://localhost:5000/api/sbomTest/filters/getFilter/${selectedOption.value}`
@@ -156,9 +161,7 @@ export function DepSearch() {
                 disabled={currentFilter !== ""}
               />
             </Tooltip>
-            <Tooltip
-              title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Start"'
-            >
+            <Tooltip title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Start"'>
               <TextField
                 label="Version Range Start"
                 onChange={(e) => setStartVersion(e.target.value)}
@@ -170,9 +173,7 @@ export function DepSearch() {
                 disabled={currentFilter !== ""}
               />
             </Tooltip>
-            <Tooltip
-              title='Leave "Version Range Start" empty for all versions smaller than or equal to "Version Range End"'
-            >
+            <Tooltip title='Leave "Version Range Start" empty for all versions smaller than or equal to "Version Range End"'>
               <TextField
                 label="Version Range End"
                 onChange={(e) => setEndVersion(e.target.value)}
@@ -201,7 +202,7 @@ export function DepSearch() {
             >
               Search Images
             </button>
-            <button className="SrcBtn" onClick={copyToClipboard}>
+            <button className="CopyBtn" onClick={copyToClipboard}>
               Copy to Clipboard
             </button>
           </div>
