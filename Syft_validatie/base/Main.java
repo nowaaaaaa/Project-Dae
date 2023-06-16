@@ -8,9 +8,6 @@ public class Main {
                 "commons-math4-legacy-exception  4.0-beta1  java-archive\n" +
                 "commons-math4-neuralnet         4.0-beta1  java-archive\n" +
                 "commons-math4-transform         4.0-beta1  java-archive");
-        var hi = new java.util.Scanner(System.in);
-        hi.nextLine();
-        hi.close();
     }
 }
 //Windows
