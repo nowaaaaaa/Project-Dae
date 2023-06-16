@@ -3,9 +3,11 @@ import sys
 from itertools import zip_longest
 
 def compareVersions(version, start, end):
+    start = "any" if start == "" else start
+    end = "any" if end == "" else end
     less = False
     more = False
-    print(version, start, end)
+    print(f"version: {version}, start: {start}, end: {end}")
     version = splitVersion(version)
     if (version == []):
         return True
@@ -23,7 +25,7 @@ def compareVersions(version, start, end):
             return False
     if (version == []):
         return False
-    print(version, start, end)
+    print(f"version: {version}, start: {start}, end: {end}")
     for i in range(len(version)):
         if not more and ((i == len(version)-1 and len(version) < len(start) and version[i] == start[i]) or int(start[i]) > int(version[i])):
             return False
@@ -74,7 +76,8 @@ def test(version_in_db: str, start: str = "", end: str = "") -> bool:
         except IndexError:
             return True
 
-def test2(version: str, begin_range: str = "any", end_range: str = "any") -> bool:
+def test2(version: str, begin_range: str, end_range: str) -> bool:
+    start, end = "any" if start == "" else start, "any" if end == "" else end
     if version == "":
         return False
     elif begin_range == end_range == "any":

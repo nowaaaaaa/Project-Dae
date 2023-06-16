@@ -134,6 +134,22 @@ def patch_filter():
     name = data.get("name")
     filter = data.get("versions")
 
+    output = []
+
+    # Remove empty dependencies
+    for dependency in filter:
+        if (dependency["name"] == ""):
+            del dependency
+        else:
+            for version in dependency["versions"]["versions"]:
+                if (version == ""):
+                    del version
+            for range in dependency["versions"]["ranges"]:
+                print(range[0], range[1])
+                if (range[0] == "" and range[1] == ""):
+                    del range
+            output.append(dependency)
+
     collection.update_one(
         {
             "name": name
@@ -141,7 +157,7 @@ def patch_filter():
         {
             "$set": {
                 "filter": [
-                    filter
+                    output
                 ]
             }
         }
@@ -159,18 +175,17 @@ def use_filter(name):
     filters_collection = db["filters"]
     images_collection = db["deps"]
 
-    filter = filters_collection.find_one({"name": name})
+    selected_filter = filters_collection.find_one({"name": name})["filter"][0]
 
-    filterArr = filter["filter"]
+    found_dependencies = []
 
-    foundDeps = []
-
-    for image in filterArr[0]:
-        print(image["name"])
+    for dependency in selected_filter:
+        if (dependency["name"] == ""):
+            continue
         matches = images_collection.aggregate([
             {
                 "$match": {
-                    "dependencies.name": image["name"]
+                    "dependencies.name": dependency["name"]
                 }
             },
             {
@@ -181,41 +196,44 @@ def use_filter(name):
                         "$filter": {
                             "input": "$dependencies",
                             "as": "dep",
-                            "cond": {"$eq": ["$$dep.name", image["name"]]}
+                            "cond": {"$eq": ["$$dep.name", dependency["name"]]}
                         }
                     }
                 }
             }
         ])
+        
         for match in matches:
-            for dep in foundDeps:
+            for dep in found_dependencies:
                 if (dep["name"] == match["name"]):
                     dep["dependencies"].append(match["dependencies"][0])
                     break
             else:
-                foundDeps.append(match)
+                found_dependencies.append(match)
 
-    print(filterArr[0])
-    returnVal = []
+    output = []
 
-    for image in foundDeps:
-        for dep in image["dependencies"]:
-            for filter in filterArr[0]:
-                if (filter["name"] == dep["name"]):
-                    if (dep["version"] in filter["versions"]["versions"]):
-                        returnVal.append(image)
-                        break
+    for image in found_dependencies:
+        for dependency in image["dependencies"]:
+            for filter in selected_filter:
+                if (dependency["name"] == filter["name"]):
+                    print(f"dependency: {dependency['name']}, filter: {filter['name']}")
+                    if (dependency["version"] in filter["versions"]["versions"]):
+                        if (image not in output):
+                            print(f"- appending {image['name']} to output")
+                            output.append(image)
+                            break
                     else:
                         for range in filter["versions"]["ranges"]:
-                            if (vc.compareVersions(dep["version"], range[0], range[1])):
-                                returnVal.append(image)
-                                break
-            
+                            if (vc.compareVersions(dependency["version"], range[0], range[1])):
+                                if (image not in output):
+                                    print(f"- appending {image['name']} to output")
+                                    output.append(image)
+                                    break
 
-        
     #Code om de dependencies te filteren op versie met specifieke versies in filter.versions.versions (=String[]) en ranges in filter.versions.ranges (=String[String, String][])
 
-    return jsonify(returnVal)
+    return jsonify(output)
 
 if __name__ == '__main__':
     app.run()

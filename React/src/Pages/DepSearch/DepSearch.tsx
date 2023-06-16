@@ -59,27 +59,13 @@ export function DepSearch() {
   };
 
   const setFileWithBaseline = () => {
-    baseLine.forEach((item: BaselineItem) => {
-      const { name, versions } = item;
-      const { versions: versionList, ranges } = versions;
-
-      versionList.forEach((version: string) => {
-        const searchDepText = name;
-        const searchStartVersionText = version || "any";
-        const searchEndVersionText = version || "any";
-
-        setFileWithDependencies(searchDepText, searchStartVersionText, searchEndVersionText);
+    fetch(
+      `http://localhost:5000/api/sbomTest/useFilter/${currentFilter}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setFile((prevFile) => [...prevFile, ...data]);
       });
-
-      ranges.forEach((range: [string, string]) => {
-        const [startVersion, endVersion] = range;
-        const searchDepText = name;
-        const searchStartVersionText = startVersion || "any";
-        const searchEndVersionText = endVersion || "any";
-
-        setFileWithDependencies(searchDepText, searchStartVersionText, searchEndVersionText);
-      });
-    });
   };
 
   const copyToClipboard = () => {

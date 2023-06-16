@@ -86,7 +86,7 @@ export const Baseline: React.FC<{
               type="text"
               value={item.name}
               onChange={(event) => handleChangeName(itemIndex, event)}
-              placeholder="Enter name"
+              placeholder="Enter Dependency Name"
             />
           </div>
           <div className="VersionsHolder">
@@ -99,7 +99,7 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeVersion(itemIndex, versionIndex, event)
                     }
-                    placeholder="Enter version"
+                    placeholder="Enter Specific Version"
                   />
                 </li>
               ))}
@@ -109,7 +109,7 @@ export const Baseline: React.FC<{
             onClick={() => handleAddVersion(itemIndex)}
             className="Button"
           >
-            Add Version
+            Add Specific Version
           </button>
           <div className="RangesHolder">
             <ul className="Ranges">
@@ -122,7 +122,7 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeRangeStart(itemIndex, rangeIndex, event)
                     }
-                    placeholder="Enter range start"
+                    placeholder="Enter Begin Range"
                   />
                   <input
                     className="RangeEnd"
@@ -131,7 +131,7 @@ export const Baseline: React.FC<{
                     onChange={(event) =>
                       handleChangeRangeEnd(itemIndex, rangeIndex, event)
                     }
-                    placeholder="Enter range end"
+                    placeholder="Enter End Range"
                   />
                 </li>
               ))}
@@ -140,13 +140,13 @@ export const Baseline: React.FC<{
               onClick={() => handleAddRange(itemIndex)}
               className="Button"
             >
-              Add Range
+              Add Version Range
             </button>
           </div>
         </div>
       ))}
       <button onClick={handleAddBaselineItem} className="AddBsln">
-        Add Baseline Item
+        Add Extra Dependency
       </button>
     </div>
   );
