@@ -133,22 +133,12 @@ def patch_filter():
 
     name = data.get("name")
     filter = data.get("versions")
+    filter = [x for x in filter if x["name"] != ""]
 
-    output = []
-
-    # Remove empty dependencies
+    # Remove empty entries
     for dependency in filter:
-        if (dependency["name"] == ""):
-            del dependency
-        else:
-            for version in dependency["versions"]["versions"]:
-                if (version == ""):
-                    del version
-            for range in dependency["versions"]["ranges"]:
-                print(range[0], range[1])
-                if (range[0] == "" and range[1] == ""):
-                    del range
-            output.append(dependency)
+        dependency["versions"]["versions"] = [x for x in dependency["versions"]["versions"] if x != ""]
+        dependency["versions"]["ranges"] = [x for x in dependency["versions"]["ranges"] if x[0] != "" and x[1] != ""]
 
     collection.update_one(
         {
@@ -157,7 +147,7 @@ def patch_filter():
         {
             "$set": {
                 "filter": [
-                    output
+                    filter
                 ]
             }
         }
@@ -217,17 +207,14 @@ def use_filter(name):
         for dependency in image["dependencies"]:
             for filter in selected_filter:
                 if (dependency["name"] == filter["name"]):
-                    print(f"dependency: {dependency['name']}, filter: {filter['name']}")
                     if (dependency["version"] in filter["versions"]["versions"]):
                         if (image not in output):
-                            print(f"- appending {image['name']} to output")
                             output.append(image)
                             break
                     else:
                         for range in filter["versions"]["ranges"]:
                             if (vc.compareVersions(dependency["version"], range[0], range[1])):
                                 if (image not in output):
-                                    print(f"- appending {image['name']} to output")
                                     output.append(image)
                                     break
 

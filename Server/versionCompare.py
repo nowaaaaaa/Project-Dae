@@ -7,7 +7,6 @@ def compareVersions(version, start, end):
     end = "any" if end == "" else end
     less = False
     more = False
-    print(f"version: {version}, start: {start}, end: {end}")
     version = splitVersion(version)
     if (version == []):
         return True
@@ -25,7 +24,6 @@ def compareVersions(version, start, end):
             return False
     if (version == []):
         return False
-    print(f"version: {version}, start: {start}, end: {end}")
     for i in range(len(version)):
         if not more and ((i == len(version)-1 and len(version) < len(start) and version[i] == start[i]) or int(start[i]) > int(version[i])):
             return False
