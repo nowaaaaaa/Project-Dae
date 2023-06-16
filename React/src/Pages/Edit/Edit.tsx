@@ -56,7 +56,7 @@ export function Edit() {
                   });
               }}
             />
-            <input type="text" onChange={(e) => setAddItem(e.target.value)} />
+            <input type="text" placeholder="Enter New Filter Name" onChange={(e) => setAddItem(e.target.value)} />
             <span
               className="AddIcon"
               onClick={() => {

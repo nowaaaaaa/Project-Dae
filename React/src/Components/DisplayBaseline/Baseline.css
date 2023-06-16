@@ -27,7 +27,7 @@
 }
 
 ul {
-    list-style-type:decimal-leading-zero;
+    list-style-type:decimal;
     margin-top: 0;
     padding-top: 0;
 }
