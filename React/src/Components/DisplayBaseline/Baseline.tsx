@@ -3,6 +3,7 @@ import "./Baseline.css";
 import AddIcon from "@mui/icons-material/Add";
 import Tooltip from "@mui/material/Tooltip";
 import ClearIcon from "@mui/icons-material/Clear";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface BaselineItem {
   name: string;
@@ -108,7 +109,7 @@ export const Baseline: React.FC<{
                 handleRemoveBaselineItem(itemIndex);
               }}
             >
-              <ClearIcon className="Clear" />
+              <DeleteIcon className="Clear" />
             </span>
           </Tooltip>
           <div className="NameHolder">
