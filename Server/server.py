@@ -207,16 +207,18 @@ def use_filter(name):
         for dependency in image["dependencies"]:
             for filter in selected_filter:
                 if (dependency["name"] == filter["name"]):
-                    if (dependency["version"] in filter["versions"]["versions"]):
+                    if (len(filter["versions"]["versions"]) == 0 and len(filter["versions"]["ranges"]) == 0):
                         if (image not in output):
                             output.append(image)
-                            break
                     else:
-                        for range in filter["versions"]["ranges"]:
-                            if (vc.compareVersions(dependency["version"], range[0], range[1])):
-                                if (image not in output):
-                                    output.append(image)
-                                    break
+                        if (dependency["version"] in filter["versions"]["versions"]):
+                            if (image not in output):
+                                output.append(image)
+                        else:
+                            for range in filter["versions"]["ranges"]:
+                                if (vc.compareVersions(dependency["version"], range[0], range[1])):
+                                    if (image not in output):
+                                        output.append(image)
 
     #Code om de dependencies te filteren op versie met specifieke versies in filter.versions.versions (=String[]) en ranges in filter.versions.ranges (=String[String, String][])
 
