@@ -24,6 +24,37 @@ export function Edit() {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    let isFetching = false;
+  
+    const handleKeyDown = (e) => {
+      if (e.key === "s" && e.ctrlKey && !isFetching && currentFilter !== "") {
+        e.preventDefault();
+        isFetching = true;
+        setLoading(true);
+        fetch(`http://localhost:5000/api/sbomTest/filters/patchFilter`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: currentFilter,
+            versions: baseLine,
+          }),
+        }).then(() => {
+          setLoading(false);
+          isFetching = false;
+        });
+      }
+    };
+  
+    window.addEventListener("keydown", handleKeyDown);
+  
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentFilter, baseLine]);
+
+  useEffect(() => {
     fetch("http://localhost:5000/api/sbomTest/filters/getNames")
       .then((res) => res.json())
       .then((data) => {
