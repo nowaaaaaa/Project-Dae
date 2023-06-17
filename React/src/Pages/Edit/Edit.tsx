@@ -5,6 +5,7 @@ import { Baseline } from "../../Components/DisplayBaseline/Baseline";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
 import Select from "react-select";
+import Swal from "sweetalert2";
 
 interface BaselineItem {
   name: string;
@@ -23,32 +24,63 @@ export function Edit() {
   const [currentFilter, setFilter] = useState<String>("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  const patchFilter = () => {
+    setLoading(true);
+    return fetch(`http://localhost:5000/api/sbomTest/filters/patchFilter`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: currentFilter,
+        versions: baseLine,
+      }),
+    })
+      .then(() => {
+        setLoading(false);
+        console.log("done");
+        Swal.fire({
+          icon: "success",
+          title: "Saved Succesfully!",
+          showConfirmButton: false,
+          timer: 1000,
+          backdrop: false,
+          position: "bottom-end",
+          toast: true,
+          color: "black",
+          background: "#f0f0f0",
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "Saving failed!",
+          showConfirmButton: false,
+          timer: 1000,
+          backdrop: false,
+          position: "bottom-end",
+          toast: true,
+          color: "black",
+          background: "#f0f0f0",
+        });
+      });
+  };
+
   useEffect(() => {
     let isFetching = false;
-  
+
     const handleKeyDown = (e) => {
       if (e.key === "s" && e.ctrlKey && !isFetching && currentFilter !== "") {
         e.preventDefault();
         isFetching = true;
-        setLoading(true);
-        fetch(`http://localhost:5000/api/sbomTest/filters/patchFilter`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: currentFilter,
-            versions: baseLine,
-          }),
-        }).then(() => {
-          setLoading(false);
-          isFetching = false;
-        });
+        patchFilter().then(() => isFetching = false);
       }
     };
-  
+
     window.addEventListener("keydown", handleKeyDown);
-  
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
@@ -126,21 +158,7 @@ export function Edit() {
                 <button
                   className="SaveButton"
                   onClick={() => {
-                    setLoading(true); //Loading aanzetten
-                    console.log(baseLine);
-                    fetch(
-                      `http://localhost:5000/api/sbomTest/filters/patchFilter`,
-                      {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          name: currentFilter,
-                          versions: baseLine,
-                        }),
-                      }
-                    ).then(() => setLoading(false)); //Loading uitzetten als de fetch klaar is
+                    patchFilter()
                   }}
                 >
                   Save
