@@ -141,7 +141,7 @@ export function DepSearch() {
                 longestVersion + 4
               )}${dep.purl}`
           )
-          .join(",\n\t");
+          .join("\n\t");
 
         return `name: ${name}\n\t${packages}\n`;
       })
@@ -232,9 +232,9 @@ export function DepSearch() {
                 disabled={currentFilter !== ""}
               />
             </Tooltip>
-            <Tooltip title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Start"'>
+            <Tooltip title='Leave "Version Range End" empty for all versions greater than or equal to "Version Range Begin"'>
               <TextField
-                label="Version Range Start"
+                label="Version Range Begin"
                 onChange={(e) => setStartVersion(e.target.value)}
                 sx={{
                   backgroundColor: currentFilter ? "#f0f0f0" : "white",
@@ -244,7 +244,7 @@ export function DepSearch() {
                 disabled={currentFilter !== ""}
               />
             </Tooltip>
-            <Tooltip title='Leave "Version Range Start" empty for all versions smaller than or equal to "Version Range End"'>
+            <Tooltip title='Leave "Version Range Begin" empty for all versions smaller than or equal to "Version Range End"'>
               <TextField
                 label="Version Range End"
                 onChange={(e) => setEndVersion(e.target.value)}

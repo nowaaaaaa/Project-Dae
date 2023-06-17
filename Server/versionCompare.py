@@ -74,7 +74,7 @@ def test(version_in_db: str, start: str = "", end: str = "") -> bool:
         except IndexError:
             return True
 
-def test2(version: str, begin_range: str, end_range: str) -> bool:
+def compare_versions_alternative(version: str, begin_range: str = "", end_range: str = "") -> bool:
     start, end = "any" if start == "" else start, "any" if end == "" else end
     if version == "":
         return False
