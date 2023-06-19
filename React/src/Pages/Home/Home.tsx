@@ -37,7 +37,6 @@ export function Home() {
         <div className="main">
           <div className="textFields">
             <TextField
-              style={{ justifySelf: "center"}}
               label="Search Images"
               onChange={(e) => setSearchImage(e.target.value)}
               sx={{

@@ -26,3 +26,9 @@
 .Spacer {
   height: 3.5rem;
 }
+
+.textFields {
+  display: flex;
+  align-content: center;
+  width: 50%;
+}
