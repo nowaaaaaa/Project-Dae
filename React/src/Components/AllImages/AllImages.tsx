@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AllImages.css";
 import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
-import Switch from "@mui/material/Switch";
 
 interface Dependency {
   name: string;
@@ -13,16 +11,6 @@ interface Dependency {
 interface Image {
   name: string;
   dependencies: Dependency[];
-}
-
-interface BaselineItem {
-  name: string;
-  versions: Version;
-}
-
-interface Version {
-  versions: string[];
-  ranges: [string, string][];
 }
 
 export const AllImages: React.FC<{
@@ -61,18 +49,6 @@ const SingleImage: React.FC<{
   depSearch: string;
 }> = ({ image, depSearch: allDepSearch }) => {
   const [imageDepSearch, setSearch] = useState<string>("");
-  const [useBase, setBase] = useState<boolean>(false);
-  const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
-
-  useEffect(() => {
-    fetch(
-      "https://eu-central-1.aws.data.mongodb-api.com/app/data-xmrsh/endpoint/getBaseline"
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setBaseLine(data[0]["baseLine"]);
-      });
-  }, []);
 
   return (
     <div className="SingleImage">
@@ -87,16 +63,6 @@ const SingleImage: React.FC<{
             onChange={(e) => setSearch(e.target.value)}
             sx={{ height: "50px" }}
           />
-        </div>
-        <div className="HeaderItem">
-          <Tooltip title="Filter Baseline" className="Switch">
-            <Switch
-              color="secondary"
-              className="Switch"
-              defaultChecked={useBase}
-              onChange={() => setBase(!useBase)}
-            />
-          </Tooltip>
         </div>
       </div>
       <div className="DepMap">

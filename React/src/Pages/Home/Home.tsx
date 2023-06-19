@@ -37,15 +37,15 @@ export function Home() {
         <div className="main">
           <div className="textFields">
             <TextField
+              style={{ justifySelf: "center"}}
               label="Search Images"
               onChange={(e) => setSearchImage(e.target.value)}
               sx={{
                 backgroundColor: "white",
                 borderRadius: "5px",
-                marginRight: "10px",
               }}
             />
-            <TextField
+            {/* <TextField
               label="Search Dependencies"
               onChange={(e) => setSearchDep(e.target.value)}
               sx={{
@@ -53,7 +53,7 @@ export function Home() {
                 borderRadius: "5px",
                 marginLeft: "10px",
               }}
-            />
+            /> */}
           </div>
           <div className="Spacer" />
           <AllImages file={file} search={searchImage} depSearch={searchDep} />
