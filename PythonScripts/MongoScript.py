@@ -10,7 +10,7 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 def syft(Image):
     Image = Image.lower()
     realImg = Image
-    Image = Image.replace(":", "_")    
+    Image = Image.replace(":", "_").replace("/", "_")
     if (client.get_database('sbomTest').get_collection(f"deps").find_one({"name": realImg})) != None:
         print("SBOM already exists in database")
         exit(1)
@@ -23,7 +23,7 @@ def syft(Image):
         exit(1)
     print("SBOM created")
     try:
-        with open(fileName) as f:
+        with open(fileName, encoding='cp850') as f:
             components = json.load(f)
     except FileNotFoundError:
         print(f"Error: file '{fileName}' not found")
