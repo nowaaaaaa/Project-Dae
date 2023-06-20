@@ -3,6 +3,7 @@ import sys
 from itertools import zip_longest
 
 def compareVersions(version, start, end):
+    print(version, start, end)
     start = "any" if start == "" else start
     end = "any" if end == "" else end
     less = False

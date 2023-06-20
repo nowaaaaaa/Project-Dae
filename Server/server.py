@@ -203,20 +203,28 @@ def use_filter(name):
 
     output = []
 
+    print(found_dependencies)
+
     for image in found_dependencies:
         for dependency in image["dependencies"]:
             for filter in selected_filter:
                 if (dependency["name"] == filter["name"]):
                     if (len(filter["versions"]["versions"]) == 0 and len(filter["versions"]["ranges"]) == 0):
+                        print(dependency["name"])
+                        print(len(filter["versions"]["versions"]), len(filter["versions"]["ranges"]))
+                        print("found any version")
                         if (image not in output):
                             output.append(image)
                     else:
                         if (dependency["version"] in filter["versions"]["versions"]):
+                            print("found specific version")
                             if (image not in output):
                                 output.append(image)
                         else:
                             for range in filter["versions"]["ranges"]:
-                                if (vc.compareVersions(dependency["version"], range[0], range[1])):
+                                print(range)
+                                if (vc.compareVersions(dependency["version"], range[1], range[0])):
+                                    print("found range")
                                     if (image not in output):
                                         output.append(image)
 
