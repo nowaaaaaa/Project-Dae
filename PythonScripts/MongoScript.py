@@ -23,7 +23,7 @@ def syft(Image):
         exit(1)
     print("SBOM created")
     try:
-        with open(fileName) as f:
+        with open(fileName, encoding='cp850') as f:
             components = json.load(f)
     except FileNotFoundError:
         print(f"Error: file '{fileName}' not found")
