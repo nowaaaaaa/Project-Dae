@@ -4,7 +4,6 @@ from itertools import zip_longest
 
 # Compares the version of a package to a version range and returns true if the version is in the range
 def compareVersions(version, start, end):
-    print(version, start, end)
     start = "any" if start == "" else start
     end = "any" if end == "" else end
     less = False

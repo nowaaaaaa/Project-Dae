@@ -48,11 +48,11 @@ export function Sidebar() {
           icon: <BorderColorIcon fontSize="large" />,
           Link: "/edit",
         },
-        // {
-        //   name: "Search Dependencies",
-        //   icon: <ImageSearchIcon fontSize="large" />,
-        //   Link: "/dependencies",
-        // },
+        {
+          name: "Search Images",
+          icon: <ImageSearchIcon fontSize="large" />,
+          Link: "/oldPage",
+        },
       ]}
     />
   );
