@@ -158,6 +158,18 @@ export function Edit() {
                   setFilterItems([...filterItems, addItem]);
                 }
                 // selectFilter({ value: addItem, label: addItem });
+                Swal.fire({
+                  // Popup in bottom right to notify user that the data has been copied
+                  icon: "success",
+                  title: "Created filter!\nSelect the filter to edit.",
+                  showConfirmButton: false,
+                  timer: 3000,
+                  backdrop: false,
+                  position: "bottom-end",
+                  toast: true,
+                  color: "black",
+                  background: "#f0f0f0",
+                });
               }}
             >
               <AddIcon />
