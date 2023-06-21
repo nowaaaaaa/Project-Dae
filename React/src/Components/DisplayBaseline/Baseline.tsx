@@ -15,10 +15,13 @@ interface Version {
   ranges: [string, string][];
 }
 
+//Note: All mentions of 'Baseline' should be changed to 'Filter'
+
 export const Baseline: React.FC<{
   baseline: BaselineItem[];
   setBaseline: React.Dispatch<React.SetStateAction<BaselineItem[]>>;
 }> = ({ baseline, setBaseline }) => {
+  //Functions to handle changes to the filter; mostly adding items to the usestate or removing them
   const handleChangeName = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement>
@@ -100,104 +103,123 @@ export const Baseline: React.FC<{
 
   return (
     <div className="BaselineMap">
-      {baseline.map((item, itemIndex) => (
-        <div key={itemIndex} className="BaselineItem">
-          <Tooltip title="Remove Dependency" arrow placement="right">
-            <span
-              className="DeleteBaselineItem"
-              onClick={() => {
-                handleRemoveBaselineItem(itemIndex);
-              }}
-            >
-              <DeleteIcon className="Clear" />
-            </span>
-          </Tooltip>
-          <div className="NameHolder">
-            <input
-              className="NameInput"
-              type="text"
-              value={item.name}
-              onChange={(event) => handleChangeName(itemIndex, event)}
-              placeholder="Dependency Name"
-            />
-          </div>
-          <div className="VersionsHolder">
-            <ul className="Versions">
-              {item.versions.versions.map((version, versionIndex) => (
-                <li key={versionIndex} className="versionsList">
-                  <input
-                    type="text"
-                    value={version}
-                    onChange={(event) =>
-                      handleChangeVersion(itemIndex, versionIndex, event)
-                    }
-                    placeholder="Enter Specific Version"
-                  />
-                  <Tooltip title="Remove Version" arrow placement="right">
-                    <span
-                      className="ClearHolder"
-                      onClick={() => {
-                        handleRemoveVersion(itemIndex, versionIndex);
-                      }}
-                    >
-                      <ClearIcon className="Clear" />
-                    </span>
-                  </Tooltip>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <button
-            onClick={() => handleAddVersion(itemIndex)}
-            className="Button"
-          >
-            Add Specific Version
-          </button>
-          <div className="RangesHolder">
-            <ul className="Ranges">
-              {item.versions.ranges.map((rangeArray, rangeIndex) => (
-                <li key={rangeIndex} className="RangeLi">
-                  <input
-                    className="RangeStart"
-                    type="text"
-                    value={rangeArray[0]}
-                    onChange={(event) =>
-                      handleChangeRangeStart(itemIndex, rangeIndex, event)
-                    }
-                    placeholder="Range Start"
-                  />
-                  <input
-                    className="RangeEnd"
-                    type="text"
-                    value={rangeArray[1]}
-                    onChange={(event) =>
-                      handleChangeRangeEnd(itemIndex, rangeIndex, event)
-                    }
-                    placeholder="Range End"
-                  />
-                  <Tooltip title="Remove Version Range" arrow placement="right">
-                    <span
-                      className="ClearHolder"
-                      onClick={() => {
-                        handleRemoveRange(itemIndex, rangeIndex);
-                      }}
-                    >
-                      <ClearIcon className="Clear" />
-                    </span>
-                  </Tooltip>
-                </li>
-              ))}
-            </ul>
+      {baseline.map(
+        (
+          item,
+          itemIndex //Mapping the filter array to display the filter
+        ) => (
+          <div key={itemIndex} className="BaselineItem">
+            <Tooltip title="Remove Dependency" arrow placement="right">
+              <span
+                className="DeleteBaselineItem"
+                onClick={() => {
+                  handleRemoveBaselineItem(itemIndex);
+                }}
+              >
+                <DeleteIcon className="Clear" />
+              </span>
+            </Tooltip>
+            <div className="NameHolder">
+              <input
+                className="NameInput"
+                type="text"
+                value={item.name}
+                onChange={(event) => handleChangeName(itemIndex, event)}
+                placeholder="Dependency Name"
+              />
+            </div>
+            <div className="VersionsHolder">
+              <ul className="Versions">
+                {item.versions.versions.map(
+                  (
+                    version,
+                    versionIndex //Mapping the versions array to display the versions, index added to support the remove version function
+                  ) => (
+                    <li key={versionIndex} className="versionsList">
+                      <input
+                        type="text"
+                        value={version}
+                        onChange={(event) =>
+                          handleChangeVersion(itemIndex, versionIndex, event)
+                        }
+                        placeholder="Enter Specific Version"
+                      />
+                      <Tooltip title="Remove Version" arrow placement="right">
+                        <span
+                          className="ClearHolder" //ClearHolder is the span that holds the clear icon, onClick cant be added to the icon itself
+                          onClick={() => {
+                            handleRemoveVersion(itemIndex, versionIndex);
+                          }}
+                        >
+                          <ClearIcon className="Clear" />
+                        </span>
+                      </Tooltip>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
             <button
-              onClick={() => handleAddRange(itemIndex)}
+              onClick={() => handleAddVersion(itemIndex)}
               className="Button"
             >
-              Add Version Range
+              Add Specific Version
             </button>
+            <div className="RangesHolder">
+              <ul className="Ranges">
+                {item.versions.ranges.map(
+                  (
+                    rangeArray,
+                    rangeIndex //Mapping the ranges array to display the ranges, index added to support the remove range function
+                  ) => (
+                    <li key={rangeIndex} className="RangeLi">
+                      <input
+                        className="RangeStart"
+                        type="text"
+                        value={rangeArray[0]}
+                        onChange={(event) =>
+                          handleChangeRangeStart(itemIndex, rangeIndex, event)
+                        }
+                        placeholder="Range Start"
+                      />
+                      <input
+                        className="RangeEnd"
+                        type="text"
+                        value={rangeArray[1]}
+                        onChange={(event) =>
+                          handleChangeRangeEnd(itemIndex, rangeIndex, event)
+                        }
+                        placeholder="Range End"
+                      />
+                      <Tooltip
+                        title="Remove Version Range"
+                        arrow
+                        placement="right"
+                      >
+                        <span
+                          className="ClearHolder"
+                          onClick={() => {
+                            handleRemoveRange(itemIndex, rangeIndex);
+                          }}
+                        >
+                          <ClearIcon className="Clear" />
+                        </span>
+                      </Tooltip>
+                    </li>
+                  )
+                )}
+              </ul>
+              <button
+                onClick={() => handleAddRange(itemIndex)}
+                className="Button"
+              >
+                Add Version Range
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
-      <Tooltip title="Add Dependency" color="red">
+        )
+      )}
+      <Tooltip title="Add Dependency">
         <button onClick={handleAddBaselineItem} className="AddBsln">
           <AddIcon fontSize="large" />
         </button>

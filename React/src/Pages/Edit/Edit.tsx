@@ -25,7 +25,7 @@ export function Edit() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const patchFilter = () => {
-    setLoading(true);
+    setLoading(true); // Sets loading to true so the loading icon will show
     return fetch(`http://localhost:5000/api/sbomTest/filters/patchFilter`, {
       method: "POST",
       headers: {
@@ -40,6 +40,7 @@ export function Edit() {
         setLoading(false);
         console.log("done");
         Swal.fire({
+          // Popup in bottom right to notify user that the filter has been saved
           icon: "success",
           title: "Saved Succesfully!",
           showConfirmButton: false,
@@ -55,6 +56,7 @@ export function Edit() {
         console.error("Error:", error);
         setLoading(false);
         Swal.fire({
+          // Popup in bottom right to notify user that the filter has not been saved
           icon: "error",
           title: "Saving failed!",
           showConfirmButton: false,
@@ -75,7 +77,7 @@ export function Edit() {
       if (e.key === "s" && e.ctrlKey && !isFetching && currentFilter !== "") {
         e.preventDefault();
         isFetching = true;
-        patchFilter().then(() => isFetching = false);
+        patchFilter().then(() => (isFetching = false));
       }
     };
 
@@ -87,7 +89,7 @@ export function Edit() {
   }, [currentFilter, baseLine]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/sbomTest/filters/getNames")
+    fetch("http://localhost:5000/api/sbomTest/filters/getNames") // Fetches all the filter names
       .then((res) => res.json())
       .then((data) => {
         setFilterItems(data);
@@ -104,13 +106,13 @@ export function Edit() {
               className="FilterSelect"
               options={filterItems.map((item) => {
                 {
-                  return { value: item, label: item };
+                  return { value: item, label: item }; //make sure the filter names are in the correct format for the select component
                 }
               })}
               onChange={(e) => {
                 setFilter(e.value);
                 fetch(
-                  `http://localhost:5000/api/sbomTest/filters/getFilter/${e.value}`
+                  `http://localhost:5000/api/sbomTest/filters/getFilter/${e.value}` // Fetches the filter with the name of the selected filter
                 )
                   .then((res) => res.json())
                   .then((data) => {
@@ -122,14 +124,14 @@ export function Edit() {
             <input
               type="text"
               placeholder="Enter New Filter Name"
-              onChange={(e) => setAddItem(e.target.value)}
+              onChange={(e) => setAddItem(e.target.value)} // Sets the name of the new filter
             />
             <span
               className="AddIcon"
               onClick={() => {
                 if (filterItems.includes(addItem) === false && addItem !== "") {
                   fetch(
-                    `http://localhost:5000/api/sbomTest/filters/postFilter`,
+                    `http://localhost:5000/api/sbomTest/filters/postFilter`, // Posts the new filter to the database
                     {
                       method: "POST",
                       body: JSON.stringify({ name: addItem }),
@@ -151,14 +153,14 @@ export function Edit() {
               <AddIcon />
             </span>
           </div>
-          {currentFilter !== "" && (
+          {currentFilter !== "" && ( // Only shows the baseline and save button if a filter is selected
             <>
               <Baseline baseline={baseLine} setBaseline={setBaseLine} />
               <div className="ButtonHolder">
                 <button
                   className="SaveButton"
                   onClick={() => {
-                    patchFilter()
+                    patchFilter();
                   }}
                 >
                   Save
