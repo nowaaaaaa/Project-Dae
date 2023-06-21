@@ -6,6 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
 import Select from "react-select";
 import Swal from "sweetalert2";
+import { Tooltip } from "@mui/material";
 
 interface BaselineItem {
   name: string;
@@ -20,7 +21,7 @@ interface Version {
 export function Edit() {
   const [baseLine, setBaseLine] = useState<BaselineItem[]>([]);
   const [filterItems, setFilterItems] = useState<String[]>([]);
-  const [addItem, setAddItem] = useState<String>("");
+  const [addItem, setAddItem] = useState<string>("");
   const [currentFilter, setFilter] = useState<String>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -121,11 +122,17 @@ export function Edit() {
                   });
               }}
             />
-            <input
-              type="text"
-              placeholder="Enter New Filter Name"
-              onChange={(e) => setAddItem(e.target.value)} // Sets the name of the new filter
-            />
+            <Tooltip title="Excludes numbers and symbols">
+              <input
+                type="text"
+                value={addItem}
+                placeholder="Enter New Filter Name"
+                onChange={(e) => {
+                  const result = e.target.value.replace(/[^a-z]/gi, "");
+                  setAddItem(result);
+                }} // Sets the name of the new filter
+              />
+            </Tooltip>
             <span
               className="AddIcon"
               onClick={() => {
