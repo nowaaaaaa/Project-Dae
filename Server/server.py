@@ -133,7 +133,7 @@ def patch_filter():
     # Remove empty entries
     for dependency in filter:
         dependency["versions"]["versions"] = [x for x in dependency["versions"]["versions"] if x != ""]
-        dependency["versions"]["ranges"] = [x for x in dependency["versions"]["ranges"] if x[0] != "" and x[1] != ""]
+        dependency["versions"]["ranges"] = [x for x in dependency["versions"]["ranges"] if x[0] != "" or x[1] != ""]
 
     # Updates the filter with the current name
     collection.update_one(
