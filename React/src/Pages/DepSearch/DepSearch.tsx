@@ -75,7 +75,7 @@ export function DepSearch() {
         //Use backspace to clear the filter instead of using the button
         clearFilter();
       }
-      if (e.key === "c" && e.ctrlKey) {
+      if (e.key === "c" && e.altKey) {
         //Use ctrl+c to copy to clipboard instead of using the button
         //could be changed to avoid making it impossible to copy other things on the page
         copyToClipboard();
