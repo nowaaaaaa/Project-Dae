@@ -8,6 +8,11 @@ pip install Flask
 pip install Flask_Cors
 ```
 
+To use the script that creates an SBOM and uploads it to MongoDB, make sure to install:
+
+    [Syft](https://github.com/anchore/syft)
+    [Docker](https://docs.docker.com/engine/install/)
+
 # Usage:
 
 Run the following command in the main directory:
