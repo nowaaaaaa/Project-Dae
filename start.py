@@ -1,7 +1,7 @@
 import os
 import webbrowser
 
-os.system('start cmd /k py Server/server.py /min')
+os.system('start cmd /k python Server/server.py /min')
 #open child directory React
 os.chdir('React')
 #run npm install if needed

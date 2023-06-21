@@ -44,11 +44,14 @@ export function DepSearch() {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    //Adds event listener to the window to listen for key presses
     let isFetching = false;
+    //isFetching is needed to avoid the useEffect from sending multiple requests
     let promise = null;
 
     const handleKeyDown = (e) => {
       if (e.key === "Enter" && !isFetching) {
+        //use enter for fetching data instead of using the button
         isFetching = true;
         setFile([]);
         if (!currentFilter) {
@@ -69,9 +72,12 @@ export function DepSearch() {
           });
       }
       if (e.key === "Backspace") {
+        //Use backspace to clear the filter instead of using the button
         clearFilter();
       }
       if (e.key === "c" && e.ctrlKey) {
+        //Use ctrl+c to copy to clipboard instead of using the button
+        //could be changed to avoid making it impossible to copy other things on the page
         copyToClipboard();
       }
     };
@@ -151,6 +157,7 @@ export function DepSearch() {
       .writeText(formattedData)
       .then(() => {
         Swal.fire({
+          // Popup in bottom right to notify user that the data has been copied
           icon: "success",
           title: "Copied to clipboard!",
           showConfirmButton: false,
@@ -164,6 +171,7 @@ export function DepSearch() {
       })
       .catch(() => {
         Swal.fire({
+          // Popup in bottom right to notify user that the data has not been copied
           icon: "error",
           title: "Copying failed!",
           showConfirmButton: false,

@@ -39,7 +39,7 @@ const DisplayDep: React.FC<{ dep: Dependency }> = ({ dep }) => {
         <p className="">{dep.name}</p>
         <p className="">{dep.version}</p>
       </div>
-      <div style={{marginLeft:5}}>{dep.purl}</div>
+      <div style={{ marginLeft: 5 }}>{dep.purl}</div>
     </div>
   );
 };
@@ -68,37 +68,15 @@ const SingleImage: React.FC<{
       <div className="DepMap">
         {image.dependencies.map((dep) => {
           // if (!useBase || allDepSearch !== "") {
-            if (imageDepSearch !== "" && dep.name.includes(imageDepSearch)) {
-              //Check for search within the image
+          if (imageDepSearch !== "" && dep.name.includes(imageDepSearch)) {
+            //Check for search within the image
+            return <DisplayDep dep={dep} />;
+          } else if (imageDepSearch === "") {
+            if (allDepSearch === "" || dep.name.includes(allDepSearch)) {
+              //Check for page search
               return <DisplayDep dep={dep} />;
-            } else if (imageDepSearch === "") {
-              if (allDepSearch === "" || dep.name.includes(allDepSearch)) {
-                //Check for page search
-                return <DisplayDep dep={dep} />;
-              }
             }
-          // } else {
-          //   if (
-          //     baseLine.some(
-          //       //Check of dependency in baseline zit. Versie en naam wordt gecheckt. Ranges moeten hier nog bij, miss is een functie overzichtelijker.
-          //       (baseDep) =>
-          //         baseDep.name === dep.name &&
-          //         baseDep.versions.versions.some(
-          //           (version) => version === dep.version
-          //         )
-          //     )
-          //   ) {
-          //     if (imageDepSearch !== "" && dep.name.includes(imageDepSearch)) {
-          //       //Check for search within the image
-          //       return <DisplayDep dep={dep} />;
-          //     } else if (imageDepSearch === "") {
-          //       if (allDepSearch === "" || dep.name.includes(allDepSearch)) {
-          //         //Check for page search
-          //         return <DisplayDep dep={dep} />;
-          //       }
-          //     }
-          //   }
-          // }
+          }
         })}
       </div>
     </div>
