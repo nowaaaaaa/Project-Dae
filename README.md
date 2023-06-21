@@ -8,6 +8,8 @@ pip install Flask
 pip install Flask_Cors
 ```
 
+To use the script that creates an SBOM and uploads it to MongoDB, make sure to install [Syft](https://github.com/anchore/syft) and [Docker](https://docs.docker.com/engine/install/).
+
 # Usage:
 
 Run the following command in the main directory:
@@ -35,8 +37,23 @@ cd Server
 python server.py
 ```
 
-To upload new SBOMs to the database, you can use the Dockerfile located in the PythonScripts folder:
+To upload new SBOMs to the database, you can use a script located in the PythonScripts folder:
 
 ```
-Noa ff beschrijven hoe je die gebruikt
+cd PythonScripts
 ```
+To build a Docker image, use:
+```
+docker build . -t mongoscript
+```
+To build a container and run it, use:
+```
+docker run --rm mongoscript <image name>
+```
+To run the script directly, use:
+```
+pip install -r requirements.txt
+py MongoScript.py <image name>
+```
+## License
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).

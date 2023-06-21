@@ -2,8 +2,8 @@ import re
 import sys
 from itertools import zip_longest
 
+# Compares the version of a package to a version range and returns true if the version is in the range
 def compareVersions(version, start, end):
-    print(version, start, end)
     start = "any" if start == "" else start
     end = "any" if end == "" else end
     less = False
@@ -38,6 +38,7 @@ def compareVersions(version, start, end):
             return True
     return True
 
+# Splits a version string into a list of numbers
 def splitVersion(version):
     res = []
     tempres = ""
