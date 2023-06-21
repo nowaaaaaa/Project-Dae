@@ -40,3 +40,6 @@ To upload new SBOMs to the database, you can use the Dockerfile located in the P
 ```
 Noa ff beschrijven hoe je die gebruikt
 ```
+
+## License
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
