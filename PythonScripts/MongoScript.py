@@ -12,20 +12,20 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 def syft(Image):
     Image = Image.lower()
     realImg = Image
-    Image = Image.replace(":", "_").replace("/", "_")
+    Image = Image.replace(":", "_").replace("/", "_") # Replace characters that are not allowed as filenames
     if (client.get_database('sbomTest').get_collection(f"deps").find_one({"name": realImg})) != None:
         print("SBOM already exists in database")
         exit(1)
         
     fileName = f"{Image}Deps.json"
-    error = os.system(f"syft {realImg} -o cyclonedx-json --file {fileName}")
+    error = os.system(f"syft {realImg} -o cyclonedx-json --file {fileName}") # Create SBOM
     if (error == 1):
         print("Syft command not ran correctly.")
         os.remove(fileName)
         exit(1)
     print("SBOM created")
     try:
-        with open(fileName, encoding='cp850') as f:
+        with open(fileName, encoding='cp850') as f: # Open SBOM, encoded with cp850 to avoid UnicodeDecodeError
             components = json.load(f)
     except FileNotFoundError:
         print(f"Error: file '{fileName}' not found")
@@ -36,6 +36,7 @@ def syft(Image):
 
     foundComponents = []
 
+    # Only take useful information from SBOM
     for c in components['components']:
         foundComponents.append({"name": c['name'], "version": c.get('version', ''), "purl": c.get('purl', '')})
 
@@ -50,9 +51,7 @@ def syft(Image):
     except Exception as e:
         print(e)
     os.remove(fileName)
-    #print("Successfully removed file")
 
-# syft(input("Enter the name of the file: "))
 if len(sys.argv) != 2:
     raise Exception("Error: give one argument (image name)")
 syft(sys.argv[1])
