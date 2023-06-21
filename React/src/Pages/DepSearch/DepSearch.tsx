@@ -144,7 +144,7 @@ export function DepSearch() {
           )
           .join("\n\t");
 
-        return `name: ${name}\n\t${packages}\n`;
+        return `image name: ${name}\n\t${packages}\n`;
       })
       .join("\n");
 
@@ -231,6 +231,7 @@ export function DepSearch() {
                   backgroundColor: currentFilter ? "#f0f0f0" : "white",
                   borderRadius: "5px",
                   marginRight: "10px",
+                  width: "16%",
                 }}
                 disabled={currentFilter !== ""}
               />
@@ -243,6 +244,7 @@ export function DepSearch() {
                   backgroundColor: currentFilter ? "#f0f0f0" : "white",
                   borderRadius: "5px",
                   marginRight: "10px",
+                  width: "16.5%",
                 }}
                 disabled={currentFilter !== ""}
               />
@@ -255,6 +257,7 @@ export function DepSearch() {
                   backgroundColor: currentFilter ? "#f0f0f0" : "white",
                   borderRadius: "5px",
                   marginRight: "10px",
+                  width: "16%",
                 }}
                 disabled={currentFilter !== ""}
               />
