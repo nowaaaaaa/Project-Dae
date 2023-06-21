@@ -97,6 +97,18 @@ export function Edit() {
       });
   }, []);
 
+  const selectFilter = (e: any) => {
+    setFilter(e.value);
+    fetch(
+      `http://localhost:5000/api/sbomTest/filters/getFilter/${e.value}` // Fetches the filter with the name of the selected filter
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setBaseLine(data);
+        console.log(data);
+      });
+  }
+
   return (
     <>
       <div className="screen">
@@ -110,17 +122,7 @@ export function Edit() {
                   return { value: item, label: item }; //make sure the filter names are in the correct format for the select component
                 }
               })}
-              onChange={(e) => {
-                setFilter(e.value);
-                fetch(
-                  `http://localhost:5000/api/sbomTest/filters/getFilter/${e.value}` // Fetches the filter with the name of the selected filter
-                )
-                  .then((res) => res.json())
-                  .then((data) => {
-                    setBaseLine(data);
-                    console.log(data);
-                  });
-              }}
+              onChange={(e) => selectFilter(e)}
             />
             <Tooltip title="Excludes numbers and symbols">
               <input
@@ -155,6 +157,7 @@ export function Edit() {
 
                   setFilterItems([...filterItems, addItem]);
                 }
+                // selectFilter({ value: addItem, label: addItem });
               }}
             >
               <AddIcon />
