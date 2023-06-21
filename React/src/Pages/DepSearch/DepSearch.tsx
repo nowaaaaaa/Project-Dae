@@ -76,8 +76,7 @@ export function DepSearch() {
         clearFilter();
       }
       if (e.key === "c" && e.altKey) {
-        //Use ctrl+c to copy to clipboard instead of using the button
-        //could be changed to avoid making it impossible to copy other things on the page
+        //Use alt+c to copy to clipboard instead of using the button to preserve the normal ctrl+c functionality
         copyToClipboard();
       }
     };
