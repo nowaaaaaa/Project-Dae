@@ -27,7 +27,7 @@ export function Edit() {
 
   const patchFilter = () => {
     setLoading(true); // Sets loading to true so the loading icon will show
-    return fetch(`http://localhost:5000/api/sbomTest/filters/patchFilter`, {
+    return fetch(`http://localhost:5000/api/filters/patchFilter`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export function Edit() {
   }, [currentFilter, baseLine]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/sbomTest/filters/getNames") // Fetches all the filter names
+    fetch("http://localhost:5000/api/filters/getNames") // Fetches all the filter names
       .then((res) => res.json())
       .then((data) => {
         setFilterItems(data);
@@ -113,7 +113,7 @@ export function Edit() {
               onChange={(e) => {
                 setFilter(e.value);
                 fetch(
-                  `http://localhost:5000/api/sbomTest/filters/getFilter/${e.value}` // Fetches the filter with the name of the selected filter
+                  `http://localhost:5000/api/filters/getFilter/${e.value}` // Fetches the filter with the name of the selected filter
                 )
                   .then((res) => res.json())
                   .then((data) => {
@@ -138,7 +138,7 @@ export function Edit() {
               onClick={() => {
                 if (filterItems.includes(addItem) === false && addItem !== "") {
                   fetch(
-                    `http://localhost:5000/api/sbomTest/filters/postFilter`, // Posts the new filter to the database
+                    `http://localhost:5000/api/filters/postFilter`, // Posts the new filter to the database
                     {
                       method: "POST",
                       body: JSON.stringify({ name: addItem }),

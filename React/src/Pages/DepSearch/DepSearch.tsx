@@ -85,7 +85,7 @@ export function DepSearch() {
   }, [currentFilter, searchDep, searchStartVersion, searchEndVersion]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/sbomTest/filters/getNames")
+    fetch("http://localhost:5000/api/filters/getNames")
       .then((res) => res.json())
       .then((data) => {
         setFilterItems(data);
@@ -99,7 +99,7 @@ export function DepSearch() {
   ) => {
     setLoading(true);
     fetch(
-      `http://localhost:5000/api/sbomTest/deps/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
+      `http://localhost:5000/api/dependencies/${searchDepText}/${searchStartVersionText}/${searchEndVersionText}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -112,7 +112,7 @@ export function DepSearch() {
 
   const setFileWithBaseline = () => {
     setLoading(true);
-    fetch(`http://localhost:5000/api/sbomTest/useFilter/${currentFilter}`)
+    fetch(`http://localhost:5000/api/useFilter/${currentFilter}`)
       .then((response) => response.json())
       .then((data) => {
         setFile((prevFile) => [...prevFile, ...data]);
@@ -189,9 +189,7 @@ export function DepSearch() {
     label: string;
   }) => {
     setCurrentFilter(selectedOption.value);
-    fetch(
-      `http://localhost:5000/api/sbomTest/filters/getFilter/${selectedOption.value}`
-    )
+    fetch(`http://localhost:5000/api/getFilter/${selectedOption.value}`)
       .then((res) => res.json())
       .then((data) => {
         setBaseLine(data);

@@ -6,9 +6,16 @@ import versionCompare as vc
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+#Change these to your own MongoDB access username and password (cloud.mongodb.com/v2/yourMongoDBLink/security/database/users)
 username = "admin"
 password = "fGBkQnRQO7CfBX7g"
+#Change to your own MongoDB link found at cloud.mongodb.com/v2/yourMongoDBLink/clusters/connect?clusterId=YourClusterName
 uri = f"mongodb+srv://{username}:{password}@mongo1.wlbtqtb.mongodb.net/?retryWrites=true&w=majority"
+
+#Change these to your own database name and collection names
+database = "sbomTest"
+imageCollection = "deps"
+filterCollection = "filters"
 
 @app.route('/api/data')
 def get_data():
@@ -34,12 +41,12 @@ def get_collections(database):
 
     return collections
 
-@app.route('/api/<database>/<collection>/dependencies/<depName>/<vStart>/<vEnd>')
-def get_dependencies(database, collection, depName, vStart, vEnd):
+@app.route('/api/dependencies/<depName>/<vStart>/<vEnd>')
+def get_dependencies(depName, vStart, vEnd):
     # Connect to the MongoDB server
     client = MongoClient(uri)
     db = client[database]
-    collection = db[collection]
+    collection = db[imageCollection]
     foundDeps = []
 
     # checks all images for the dependency name and version range
@@ -59,14 +66,14 @@ def get_dependencies(database, collection, depName, vStart, vEnd):
 
     return jsonify(foundDeps)
 
-@app.route('/api/sbomTest/filters/getNames')
+@app.route('/api/filters/getNames')
 def get_names():
     # Connect to the MongoDB server
     client = MongoClient(uri)
 
-    db = client["sbomTest"]
+    db = client[database]
 
-    collection = db["filters"]
+    collection = db[filterCollection]
 
     names = []
 
@@ -76,14 +83,14 @@ def get_names():
 
     return jsonify(names)
 
-@app.route('/api/sbomTest/filters/postFilter', methods=['POST'])
+@app.route('/api/filters/postFilter', methods=['POST'])
 def post_filter():
     # Connect to the MongoDB server
     client = MongoClient(uri)
 
-    db = client["sbomTest"]
+    db = client[database]
 
-    collection = db["filters"]
+    collection = db[filterCollection]
 
     name = request.json.get("name")
 
@@ -95,14 +102,14 @@ def post_filter():
 
     return jsonify({"message": "Post Successful"})
 
-@app.route('/api/sbomTest/filters/getFilter/<name>')
+@app.route('/api/filters/getFilter/<name>')
 def get_filter(name):
     # Connect to the MongoDB server
     client = MongoClient(uri)
 
-    db = client["sbomTest"]
+    db = client[database]
 
-    collection = db["filters"]
+    collection = db[filterCollection]
 
     # gets the filter with the specified name
     filter = collection.find_one({"name": name})
@@ -115,14 +122,14 @@ def get_filter(name):
 
     return jsonify(values[0])
 
-@app.route('/api/sbomTest/filters/patchFilter', methods=['POST'])
+@app.route('/api/filters/patchFilter', methods=['POST'])
 def patch_filter():
     # Connect to the MongoDB server
     client = MongoClient(uri)
 
-    db = client["sbomTest"]
+    db = client[database]
 
-    collection = db["filters"]
+    collection = db[filterCollection]
 
     data = request.get_json()
 
@@ -151,12 +158,12 @@ def patch_filter():
 
     return jsonify({"message": "Patch Successful"})
 
-@app.route('/api/sbomTest/useFilter/<name>')
+@app.route('/api/useFilter/<name>')
 def use_filter(name):
     # Connect to the MongoDB server
     client = MongoClient(uri)
 
-    db = client["sbomTest"]
+    db = client[database]
 
     filters_collection = db["filters"]
     images_collection = db["deps"]
