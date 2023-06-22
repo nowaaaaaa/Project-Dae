@@ -15,7 +15,7 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 def syft(Image):
     Image = Image.lower()
     realImg = Image
-    Image = Image.replace(":", "_").replace("/", "_") # Replace characters that are not allowed as filenames
+    Image = Image.replace(":", "_").replace("/", "_") # Replace characters that are not allowed as filenames to avoid errors
     if (client.get_database('sbomTest').get_collection(f"deps").find_one({"name": realImg})) != None:
         print("SBOM already exists in database")
         exit(1)
