@@ -6,6 +6,7 @@ import versionCompare as vc
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+# Use credentials to connect to MongoDB
 username = "admin"
 password = "fGBkQnRQO7CfBX7g"
 uri = f"mongodb+srv://{username}:{password}@mongo1.wlbtqtb.mongodb.net/?retryWrites=true&w=majority"

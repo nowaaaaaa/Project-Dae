@@ -3,12 +3,15 @@ from pymongo.server_api import ServerApi
 import json
 import os
 import sys
+
+# Use credentials to connect to MongoDB
 username = "admin"
 password = "fGBkQnRQO7CfBX7g"
 uri = f"mongodb+srv://{username}:{password}@mongo1.wlbtqtb.mongodb.net/?retryWrites=true&w=majority"
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
 # Send a ping to confirm a successful connection
+
 def syft(Image):
     Image = Image.lower()
     realImg = Image
