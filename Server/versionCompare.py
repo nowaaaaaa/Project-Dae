@@ -26,12 +26,16 @@ def compareVersions(version, start, end):
     if (version == []):
         return False
     for i in range(len(version)):
+        # start is longer than version or version is less than start
         if not more and ((i == len(version)-1 and len(version) < len(start) and version[i] == start[i]) or int(start[i]) > int(version[i])):
             return False
+        # end is longer than version or version is more than end
         if not less and ((i == len(end)-1 and len(end) < len(version) and version[i] == end[i]) or int(end[i]) < int(version[i])):
             return False
+        # version is longer than start or version is more than start
         if not more and (int(version[i]) > int(start[i]) or (version[i] == start[i] and len(version) > len(start) and i == len(start)-1)):
             more = True
+        # version is longer than end or version is less than end
         if not less and (int(version[i]) < int(end[i]) or (version[i] == end[i] and len(version) < len(end) and i == len(version)-1)):
             less = True
         if (more and less):

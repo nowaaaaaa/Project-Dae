@@ -6,13 +6,13 @@ import versionCompare as vc
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-#Change these to your own MongoDB access username and password (cloud.mongodb.com/v2/yourMongoDBLink/security/database/users)
+# Change these to your own MongoDB access username and password (cloud.mongodb.com/v2/yourMongoDBLink/security/database/users)
 username = "admin"
 password = "fGBkQnRQO7CfBX7g"
-#Change to your own MongoDB link found at cloud.mongodb.com/v2/yourMongoDBLink/clusters/connect?clusterId=YourClusterName
+# Change to your own MongoDB link found at cloud.mongodb.com/v2/yourMongoDBLink/clusters/connect?clusterId=YourClusterName
 uri = f"mongodb+srv://{username}:{password}@mongo1.wlbtqtb.mongodb.net/?retryWrites=true&w=majority"
 
-#Change these to your own database name and collection names
+# Change these to your own database name and collection names
 database = "sbomTest"
 imageCollection = "deps"
 filterCollection = "filters"
@@ -49,7 +49,7 @@ def get_dependencies(depName, vStart, vEnd):
     collection = db[imageCollection]
     foundDeps = []
 
-    # checks all images for the dependency name and version range
+    # Checks all images for the dependency name and version range
     for image in collection.find():
         deps = image.get("dependencies")
         foundDeps.append({"dependencies": [], "name": image.get("name")})
@@ -77,7 +77,7 @@ def get_names():
 
     names = []
 
-    # gets all filter names, and returns only the name for faster loading in the frontend dropdown
+    # Gets all filter names, and returns only the name for faster loading in the frontend dropdown
     for image in collection.find():
         names.append(image.get("name"))
 
@@ -94,7 +94,7 @@ def post_filter():
 
     name = request.json.get("name")
 
-    # adds the filter to the database with empty filter value to be added later in the frontend
+    # Adds the filter to the database with empty filter value to be added later in the frontend
     collection.insert_one({
         "name": name,
         "filter": []
@@ -111,12 +111,12 @@ def get_filter(name):
 
     collection = db[filterCollection]
 
-    # gets the filter with the specified name
+    # Gets the filter with the specified name
     filter = collection.find_one({"name": name})
 
     values = []
 
-    # returns the filter value in the old 'Baseline' format for easy frontend use
+    # Returns the filter value in the old 'Baseline' format for easy frontend use
     for val in filter["filter"]:
         values.append(val)
 
@@ -172,7 +172,7 @@ def use_filter(name):
 
     found_dependencies = []
 
-    #finds all images that have the selected dependencies, only dependency name is checked here
+    # Finds all images that have the selected dependencies, only dependency name is checked here
     for dependency in selected_filter:
         if (dependency["name"] == ""):
             continue
@@ -197,7 +197,7 @@ def use_filter(name):
             }
         ])
         
-        #loops through found dependencies and adds them to the list if they are not already in it
+        # Loops through found dependencies and adds them to the list if they are not already in it
         for match in matches:
             for dep in found_dependencies:
                 if (dep["name"] == match["name"]):
@@ -208,7 +208,7 @@ def use_filter(name):
 
     output = []
 
-    #loops through found dependencies and adds them to the output list if they match the filter
+    # Loops through found dependencies and adds them to the output list if they match the filter
     for image in found_dependencies:
         output.append({"name": image["name"], "dependencies": []})
         for dependency in image["dependencies"]:
